@@ -4,6 +4,7 @@ import GalleryModal from '../components/GalleryModal.jsx';
 import styles from '../styles/ProjectDetail.module.css';
 import pageStyles from '../styles/PageSections.module.css';
 import { useData } from '../store/DataContext.jsx';
+import { asset } from '../utils/asset.js';
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
@@ -67,7 +68,7 @@ const ProjectDetail = () => {
 
       {project.coverImage ? (
         <div className={styles.heroImage}>
-          <img src={project.coverImage} alt={project.title} />
+          <img src={asset(project.coverImage)} alt={project.title} />
         </div>
       ) : null}
 
@@ -94,7 +95,7 @@ const ProjectDetail = () => {
           <div className={styles.galleryGrid}>
             {project.gallery?.map((image) => (
               <button type="button" key={image.id} onClick={() => setSelectedImage(image)}>
-                <img src={image.src} alt={image.alt} loading="lazy" />
+                <img src={asset(image.src)} alt={image.alt} loading="lazy" />
               </button>
             ))}
             {project.gallery?.length === 0 ? <p className={pageStyles.heroDescription}>No gallery images yet.</p> : null}

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/GalleryModal.module.css';
+import { asset } from '../utils/asset.js';
 
 const GalleryModal = ({ image, onClose }) => {
   useEffect(() => {
@@ -31,7 +32,7 @@ const GalleryModal = ({ image, onClose }) => {
           ✕
         </button>
         <figure>
-          <img src={image.src} alt={image.alt} />
+          <img src={asset(image.src)} alt={image.alt} />
           {image.alt ? <figcaption>{image.alt}</figcaption> : null}
         </figure>
       </div>
