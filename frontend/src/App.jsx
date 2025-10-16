@@ -3,6 +3,7 @@ import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Landing from './pages/Landing.jsx';
 import ProjectDetail from './pages/ProjectDetail.jsx';
+import Admin from './pages/Admin.jsx';
 import styles from './styles/App.module.css';
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/about" element={<Landing />} />
           <Route path="/portfolio" element={<Landing />} />
           <Route path="/portfolio/:projectId" element={<ProjectDetail />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Landing />} />
         </Routes>
       </main>

@@ -48,7 +48,7 @@ const Header = () => {
       <div className={styles.headerInner}>
         <NavLink to="/" className={styles.brand}>
           <span className={styles.brandAccent} aria-hidden="true" />
-          Coral Portfolio
+          Coral Atelier
         </NavLink>
         <button
           className={styles.mobileMenuButton}
