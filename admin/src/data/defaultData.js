@@ -12,13 +12,16 @@ const buildGallery = (images) =>
 
 export const defaultData = {
   settings: {
-    adminPassword: ''
+    adminPassword: '',
+    siteTitle: 'Coral Dias',
+    logo: ''
   },
   home: {
     eyebrow: 'Surface pattern dias',
     title: 'Tailored fashion prints distilled from tidal botanica',
     description:
       'Coral Dias is the print practice of Isla Marin, blending hand-painted botanicals, underwater photography, and experimental dye labs into couture-ready surfaces. Each commission braids ocean narratives with tactile color stories for runway, resort, and editorial collaborators.',
+    ribbonText: 'Limited print editions',
     primaryCta: {
       label: 'Explore portfolio',
       href: '/portfolio'
@@ -174,4 +177,3 @@ export const defaultData = {
 };
 
 export const getDefaultData = () => JSON.parse(JSON.stringify(defaultData));
-

@@ -15,6 +15,27 @@
   gap: 1rem;
 }
 
+.sectionsNav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sectionsNav a {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(27, 28, 38, 0.06);
+  color: #2c2d3b;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.sectionsNav a:hover,
+.sectionsNav a:focus-visible {
+  background: rgba(31, 63, 255, 0.12);
+}
+
 .headerTitle {
   font-size: clamp(1.75rem, 2vw + 1rem, 2.6rem);
   font-weight: 600;

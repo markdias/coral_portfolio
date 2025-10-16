@@ -6,6 +6,7 @@ import AboutEditor from './AboutEditor.jsx';
 import PortfolioEditor from './PortfolioEditor.jsx';
 import CollectionsManager from './CollectionsManager.jsx';
 import ProjectsManager from './ProjectsManager.jsx';
+import SiteSettings from './SiteSettings.jsx';
 
 const AdminPanel = () => {
   const {
@@ -13,6 +14,7 @@ const AdminPanel = () => {
     updateHome,
     updateAbout,
     updatePortfolio,
+    updateSettings,
     addCollection,
     updateCollection,
     removeCollection,
@@ -118,30 +120,55 @@ const AdminPanel = () => {
           </button>
         </div>
       </header>
+      <nav className={styles.sectionsNav} aria-label="Sections">
+        <a href="#site-settings">Site</a>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#collections">Collections</a>
+        <a href="#projects">Projects</a>
+        <a href="#publish">Publish</a>
+        <a href="#content-data">Data</a>
+      </nav>
 
-      <HomeEditor home={data.home} onSave={updateHome} />
+      <section id="site-settings">
+        <SiteSettings settings={data.settings} onSave={updateSettings} />
+      </section>
 
-      <AboutEditor about={data.about} onSave={updateAbout} onCreateId={createId} />
+      <section id="home">
+        <HomeEditor home={data.home} onSave={updateHome} />
+      </section>
 
-      <PortfolioEditor portfolio={data.portfolio} onSave={updatePortfolio} />
+      <section id="about">
+        <AboutEditor about={data.about} onSave={updateAbout} onCreateId={createId} />
+      </section>
 
-      <CollectionsManager
+      <section id="portfolio">
+        <PortfolioEditor portfolio={data.portfolio} onSave={updatePortfolio} />
+      </section>
+
+      <section id="collections">
+        <CollectionsManager
         collections={data.collections}
         projects={data.projects}
         onAddCollection={() => addCollection({})}
         onUpdateCollection={updateCollection}
         onRemoveCollection={removeCollection}
-      />
+        />
+      </section>
 
-      <ProjectsManager
+      <section id="projects">
+        <ProjectsManager
         projects={data.projects}
         collections={data.collections}
         onAddProject={addProject}
         onUpdateProject={updateProject}
         onRemoveProject={removeProject}
         onCreateId={createId}
-      />
+        />
+      </section>
 
+      <section id="publish" className={styles.sectionGroup}>
       <div className={styles.panelCard}>
         <h2 className={styles.panelTitle}>Publish</h2>
         <p className={styles.panelDescription}>
@@ -158,7 +185,9 @@ const AdminPanel = () => {
         </div>
         {reloadMessage ? <p className={styles.note}>{reloadMessage}</p> : null}
       </div>
+      </section>
 
+      <section id="content-data" className={styles.sectionGroup}>
       <div className={styles.panelCard}>
         <h2 className={styles.panelTitle}>Content data</h2>
         <p className={styles.panelDescription}>Backup or import your content JSON.</p>
@@ -184,6 +213,7 @@ const AdminPanel = () => {
           </button>
         </div>
       </div>
+      </section>
     </section>
   );
 };
