@@ -178,3 +178,10 @@
 .masonry > * {
   margin-bottom: 1.75rem;
 }
+
+/* New grid layout for uniform card sizing */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+}

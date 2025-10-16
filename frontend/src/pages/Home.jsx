@@ -1,13 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useMemo } from 'react';
-import ProjectCard from '../components/ProjectCard.jsx';
 import pageStyles from '../styles/PageSections.module.css';
 import portfolioStyles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
 
 const Home = () => {
   const { data } = useData();
-  const featuredProjects = useMemo(() => data.projects.slice(0, 3), [data.projects]);
   const heroImage = data.home.heroImage || data.projects[0]?.coverImage;
 
   return (
@@ -32,11 +29,6 @@ const Home = () => {
       <div className={pageStyles.heroMedia}>
         {heroImage ? <img src={heroImage} alt={data.home.title} loading="lazy" /> : null}
         <span className={pageStyles.heroRibbon}>Limited print editions</span>
-      </div>
-      <div className={portfolioStyles.featuredCarousel}>
-        {featuredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} variant="compact" />
-        ))}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import GalleryModal from '../components/GalleryModal.jsx';
 import styles from '../styles/ProjectDetail.module.css';
@@ -17,6 +17,11 @@ const ProjectDetail = () => {
     [data.collections, project?.collectionId]
   );
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // Ensure we land at top when navigating from a portfolio card
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+  }, []);
 
   if (!project) {
     return (
@@ -66,6 +71,12 @@ const ProjectDetail = () => {
         </div>
       ) : null}
 
+      <div>
+        <a href="#gallery" className={styles.jumpLink}>
+          View gallery ↓
+        </a>
+      </div>
+
       <div className={styles.bodyContent}>
         <section className={pageStyles.textBlock}>
           <h2>Project narrative</h2>
@@ -77,7 +88,7 @@ const ProjectDetail = () => {
           </p>
         </section>
 
-        <section>
+        <section id="gallery">
           <h2>Gallery</h2>
           <p>Explore close-up textures and runway captures. Select any frame to open the full gallery experience.</p>
           <div className={styles.galleryGrid}>

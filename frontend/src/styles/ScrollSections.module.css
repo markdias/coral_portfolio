@@ -5,7 +5,7 @@
   overflow-y: auto;
   scroll-snap-type: y mandatory;
   scroll-padding-top: var(--header-height);
-  background: #f6f1eb;
+  background: transparent;
   color: #2f2523;
 }
 
@@ -48,8 +48,7 @@
 }
 
 .homeTone {
-  background: radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.9), rgba(246, 241, 235, 0) 42%),
-    linear-gradient(130deg, #f8f3ec 18%, #f1e2da 62%, #f8f3ec 96%);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .homeTone::before {
@@ -64,8 +63,7 @@
 }
 
 .aboutTone {
-  background: radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.9), rgba(246, 241, 235, 0) 46%),
-    linear-gradient(135deg, #f7f0ea 12%, #e9f0f1 60%, #f6f1eb 95%);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .aboutTone::before {
@@ -80,8 +78,7 @@
 }
 
 .portfolioTone {
-  background: radial-gradient(circle at 18% 80%, rgba(255, 255, 255, 0.94), rgba(246, 241, 235, 0) 50%),
-    linear-gradient(120deg, #f9f4ef 10%, #f1e8f0 55%, #f6f1eb 100%);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .portfolioTone::before {

@@ -68,7 +68,7 @@ const HomeEditor = ({ home, onSave }) => {
               id="home-eyebrow"
               value={formState.eyebrow}
               onChange={(event) => handleFieldChange('eyebrow', event.target.value)}
-              placeholder="Surface pattern atelier"
+              placeholder="Surface pattern dias"
             />
           </div>
           <div className={styles.fieldGroup}>

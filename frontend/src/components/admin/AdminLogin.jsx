@@ -25,7 +25,7 @@ const AdminLogin = () => {
       <div className={styles.panelCard}>
         <h1 className={styles.panelTitle}>Studio backend</h1>
         <p className={styles.panelDescription}>
-          Enter the atelier password to unlock editing tools for the home, about, and portfolio collections. Updates are saved to
+          Enter the dias password to unlock editing tools for the home, about, and portfolio collections. Updates are saved to
           your browser and reflected instantly on the public site.
         </p>
         <form className={styles.fieldGrid} onSubmit={handleSubmit}>

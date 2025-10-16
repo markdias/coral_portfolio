@@ -35,12 +35,9 @@ const Footer = () => {
           Portfolio
         </NavLink>
         <a href="mailto:hello@coralatelier.studio">Contact</a>
-        <NavLink to="/admin" className="visuallyHidden">
-          Admin
-        </NavLink>
       </div>
       <p className={styles.footerSmall}>
-        © {year} Coral Atelier. Fashion print stories composed with coastal botanicals and luminous color.
+        © {year} Coral Dias. Fashion print stories composed with coastal botanicals and luminous color.
       </p>
     </footer>
   );

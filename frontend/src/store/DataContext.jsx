@@ -19,6 +19,12 @@ const loadStoredData = () => {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
+      // If content version changed (from a publish), ignore old local edits
+      const storedVersion = parsed?.settings?.__contentVersion;
+      const defaultVersion = defaultData?.settings?.__contentVersion;
+      if (defaultVersion && storedVersion !== defaultVersion) {
+        return getDefaultData();
+      }
       return { ...defaultData, ...parsed };
     }
   } catch (error) {
@@ -187,6 +193,11 @@ export const DataProvider = ({ children }) => {
 
   const resetData = () => setData(getDefaultData());
 
+  // Replace all content with a provided dataset (trusted from import)
+  const replaceData = (next) => {
+    setData(() => ({ ...getDefaultData(), ...next }));
+  };
+
   const value = useMemo(
     () => ({
       data,
@@ -204,6 +215,7 @@ export const DataProvider = ({ children }) => {
       isAuthenticated,
       setPassword,
       resetData,
+      replaceData,
       createId,
       clone
     }),

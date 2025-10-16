@@ -47,7 +47,7 @@ const Portfolio = () => {
           </div>
         ) : null}
       </div>
-      <div className={styles.masonry}>
+      <div className={styles.cardsGrid}>
         {filteredProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
