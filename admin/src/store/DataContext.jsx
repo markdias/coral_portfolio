@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { defaultData, getDefaultData } from '../data/defaultData.js';
 import { createId } from '../utils/id.js';
 
-const STORAGE_KEY = 'coral-portfolio-data';
-const AUTH_KEY = 'coral-portfolio-admin';
+const STORAGE_KEY = 'coral-portfolio-admin-data';
+const AUTH_KEY = 'coral-portfolio-admin-auth';
 
 const DataContext = createContext(null);
 
@@ -19,16 +19,10 @@ const loadStoredData = () => {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      // If content version changed (from a publish), ignore old local edits
-      const storedVersion = parsed?.settings?.__contentVersion;
-      const defaultVersion = defaultData?.settings?.__contentVersion;
-      if (defaultVersion && storedVersion !== defaultVersion) {
-        return getDefaultData();
-      }
       return { ...defaultData, ...parsed };
     }
   } catch (error) {
-    console.warn('Unable to read stored portfolio data', error);
+    console.warn('Unable to read stored admin data', error);
   }
 
   return getDefaultData();
@@ -46,7 +40,7 @@ export const DataProvider = ({ children }) => {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      console.warn('Unable to persist portfolio data', error);
+      console.warn('Unable to persist admin data', error);
     }
   }, [data]);
 
@@ -58,6 +52,16 @@ export const DataProvider = ({ children }) => {
       window.localStorage.removeItem(AUTH_KEY);
     }
   }, [isAuthenticated]);
+
+  // Helper for calling the local API with auth header
+  const apiFetch = async (url, options = {}) => {
+    const headers = {
+      ...(options.headers || {}),
+      'x-admin-password': import.meta.env.VITE_ADMIN_PASSWORD || ''
+    };
+    const res = await fetch(url, { ...options, headers });
+    return res;
+  };
 
   const updateHome = (updates) =>
     setData((prev) => ({
@@ -101,6 +105,9 @@ export const DataProvider = ({ children }) => {
       collections: [...prev.collections, newCollection]
     }));
 
+    // Try to create a media folder for this collection (best-effort)
+    apiFetch(`/api/media/collection/${newCollection.id}`, { method: 'POST' }).catch(() => {});
+
     return newCollection.id;
   };
 
@@ -131,6 +138,15 @@ export const DataProvider = ({ children }) => {
       )
     }));
 
+  useEffect(() => {
+    // When a collection is removed, attempt to remove its media folder
+    // This effect is a no-op by itself; removal is best handled inline when invoked.
+  }, []);
+
+  const removeCollectionMedia = (collectionId) => {
+    apiFetch(`/api/media/collection/${collectionId}`, { method: 'DELETE' }).catch(() => {});
+  };
+
   const addProject = (project) => {
     const newProject = {
       id: createId('project'),
@@ -149,6 +165,9 @@ export const DataProvider = ({ children }) => {
       projects: [newProject, ...prev.projects]
     }));
 
+    // Create a media folder for the project (best-effort)
+    apiFetch(`/api/media/project/${newProject.id}`, { method: 'POST' }).catch(() => {});
+
     return newProject.id;
   };
 
@@ -165,37 +184,72 @@ export const DataProvider = ({ children }) => {
       )
     }));
 
-  const removeProject = (projectId) =>
+  const removeProject = (projectId) => {
     setData((prev) => ({
       ...prev,
       projects: prev.projects.filter((project) => project.id !== projectId)
     }));
+    // Remove the media folder for this project (best-effort)
+    apiFetch(`/api/media/project/${projectId}`, { method: 'DELETE' }).catch(() => {});
+  };
 
   const login = (password) => {
-    if (password === data.settings.adminPassword) {
+    const expected = import.meta.env.VITE_ADMIN_PASSWORD || '';
+    if (expected && password === expected) {
       setIsAuthenticated(true);
       return { success: true };
     }
-
     return { success: false, message: 'Incorrect password. Please try again.' };
   };
 
   const logout = () => setIsAuthenticated(false);
 
-  const setPassword = (newPassword) =>
-    setData((prev) => ({
-      ...prev,
-      settings: {
-        ...prev.settings,
-        adminPassword: newPassword
-      }
-    }));
-
   const resetData = () => setData(getDefaultData());
 
-  // Replace all content with a provided dataset (trusted from import)
   const replaceData = (next) => {
     setData(() => ({ ...getDefaultData(), ...next }));
+  };
+
+  // On first load (no local edits), try to hydrate from the frontend dataset via local API
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored) return; // respect existing local edits
+    (async () => {
+      try {
+        const res = await fetch('/api/current');
+        if (!res.ok) return; // no-op on failure
+        const payload = await res.json();
+        if (payload && payload.data) {
+          replaceData(payload.data);
+        }
+      } catch (_) {}
+    })();
+  }, []);
+
+  // Ensure base images folders exist once per session
+  useEffect(() => {
+    apiFetch('/api/media/init', { method: 'POST' }).catch(() => {});
+  }, []);
+
+  const publishToFrontend = async () => {
+    try {
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-password': import.meta.env.VITE_ADMIN_PASSWORD || ''
+        },
+        body: JSON.stringify({ data })
+      });
+      if (!res.ok) {
+        const msg = await res.text();
+        throw new Error(msg || 'Failed to publish');
+      }
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
   };
 
   const value = useMemo(
@@ -213,16 +267,13 @@ export const DataProvider = ({ children }) => {
       login,
       logout,
       isAuthenticated,
-      setPassword,
       resetData,
       replaceData,
       createId,
-      clone
+      clone,
+      publishToFrontend
     }),
-    [
-      data,
-      isAuthenticated
-    ]
+    [data, isAuthenticated]
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

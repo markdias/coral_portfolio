@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useData } from '../../store/DataContext.jsx';
 import styles from '../../styles/Admin.module.css';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
   const { login } = useData();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,7 +12,7 @@ const AdminLogin = () => {
     const result = login(password.trim());
     if (result.success) {
       setPassword('');
-      navigate('/admin', { replace: true });
+      setError('');
     } else if (result.message) {
       setError(result.message);
     }
@@ -25,8 +23,7 @@ const AdminLogin = () => {
       <div className={styles.panelCard}>
         <h1 className={styles.panelTitle}>Studio backend</h1>
         <p className={styles.panelDescription}>
-          Enter the dias password to unlock editing tools for the home, about, and portfolio collections. Updates are saved to
-          your browser and reflected instantly on the public site.
+          Enter the admin password to unlock editing tools. Updates stay local unless you publish to the frontend.
         </p>
         <form className={styles.fieldGrid} onSubmit={handleSubmit}>
           <div className={styles.fieldGroup}>
@@ -54,3 +51,4 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+

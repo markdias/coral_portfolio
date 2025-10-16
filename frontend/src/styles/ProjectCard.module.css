@@ -9,11 +9,13 @@
   break-inside: avoid;
   display: flex;
   flex-direction: column;
+  /* Keep cards looking uniform in the grid */
+  height: 100%;
 }
 
 .card:hover,
 .card:focus-within {
-  transform: translateY(-12px);
+  /* Remove vertical translation to prevent masonry layout jitter */
   border-color: rgba(35, 29, 28, 0.6);
   box-shadow: 0 32px 60px rgba(48, 36, 32, 0.18);
 }
@@ -71,6 +73,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  /* Fix content height so overall card stays consistent */
+  min-height: 200px;
+  max-height: 200px;
+  overflow: hidden;
 }
 
 .subtitle {
@@ -78,6 +84,10 @@
   color: rgba(47, 37, 35, 0.55);
   letter-spacing: 0.32em;
   text-transform: uppercase;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .title {
@@ -86,6 +96,10 @@
   font-weight: 500;
   color: #231d1c;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .meta {
@@ -95,6 +109,9 @@
   font-size: 0.85rem;
   color: rgba(47, 37, 35, 0.58);
   letter-spacing: 0.08em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .meta span::before {
