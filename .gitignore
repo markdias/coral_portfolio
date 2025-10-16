@@ -5,6 +5,7 @@
 .env
 *.env
 **/.env
+admin/.env.example
 
 # Builds
 dist
