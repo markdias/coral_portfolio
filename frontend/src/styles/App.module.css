@@ -1,0 +1,23 @@
+.appShell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, rgba(247, 240, 235, 0.9), rgba(250, 245, 239, 0.98)),
+    radial-gradient(circle at 18% 14%, rgba(235, 214, 203, 0.4), transparent 48%),
+    radial-gradient(circle at 84% 82%, rgba(214, 197, 220, 0.35), transparent 52%),
+    #f6f1eb;
+  color: #2f2523;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.detailView {
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(3rem, 7vw, 4.5rem) clamp(1.5rem, 7vw, 5rem);
+  background: linear-gradient(130deg, rgba(249, 244, 239, 0.96), rgba(238, 223, 230, 0.92));
+}

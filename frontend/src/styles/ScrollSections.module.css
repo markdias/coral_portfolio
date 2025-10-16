@@ -1,0 +1,110 @@
+.snapWrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--header-height);
+  background: #f6f1eb;
+  color: #2f2523;
+}
+
+.snapWrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.snapWrapper::-webkit-scrollbar-thumb {
+  background: rgba(65, 55, 51, 0.18);
+  border-radius: 999px;
+}
+
+.snapSection {
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: center;
+  padding: clamp(4.5rem, 8vw, 6.5rem) clamp(1.5rem, 8vw, 6rem);
+  isolation: isolate;
+}
+
+.snapSection::after {
+  content: '';
+  position: absolute;
+  inset: clamp(1.25rem, 4vw, 3rem);
+  border-radius: clamp(1.5rem, 5vw, 3.25rem);
+  pointer-events: none;
+  border: 1px solid rgba(73, 58, 55, 0.12);
+  mix-blend-mode: multiply;
+  opacity: 0.65;
+}
+
+.snapSection > * {
+  position: relative;
+  z-index: 1;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+}
+
+.homeTone {
+  background: radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.9), rgba(246, 241, 235, 0) 42%),
+    linear-gradient(130deg, #f8f3ec 18%, #f1e2da 62%, #f8f3ec 96%);
+}
+
+.homeTone::before {
+  content: '';
+  position: absolute;
+  inset: 6% clamp(1.5rem, 5vw, 4rem) auto clamp(1.5rem, 5vw, 4rem);
+  height: clamp(140px, 24vh, 220px);
+  border-radius: 999px;
+  background: rgba(219, 170, 152, 0.28);
+  filter: blur(0.5px);
+  z-index: 0;
+}
+
+.aboutTone {
+  background: radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.9), rgba(246, 241, 235, 0) 46%),
+    linear-gradient(135deg, #f7f0ea 12%, #e9f0f1 60%, #f6f1eb 95%);
+}
+
+.aboutTone::before {
+  content: '';
+  position: absolute;
+  inset: auto clamp(1.5rem, 6vw, 4.5rem) 7% clamp(1.5rem, 6vw, 4.5rem);
+  height: clamp(160px, 26vh, 240px);
+  border-radius: 56% 44% 58% 42% / 48% 42% 58% 52%;
+  background: rgba(174, 196, 198, 0.26);
+  filter: blur(0.8px);
+  z-index: 0;
+}
+
+.portfolioTone {
+  background: radial-gradient(circle at 18% 80%, rgba(255, 255, 255, 0.94), rgba(246, 241, 235, 0) 50%),
+    linear-gradient(120deg, #f9f4ef 10%, #f1e8f0 55%, #f6f1eb 100%);
+}
+
+.portfolioTone::before {
+  content: '';
+  position: absolute;
+  inset: clamp(2rem, 7vw, 4.5rem) clamp(1.75rem, 8vw, 5rem);
+  border-radius: 40% 60% 58% 42% / 52% 46% 54% 48%;
+  background: rgba(199, 169, 209, 0.25);
+  filter: blur(0.6px);
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .snapWrapper {
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+  }
+
+  .snapSection {
+    padding: clamp(3.25rem, 12vw, 4.5rem) clamp(1.25rem, 6vw, 3rem);
+  }
+
+  .snapSection::after {
+    inset: clamp(0.85rem, 5vw, 2.25rem);
+    border-radius: clamp(1.25rem, 7vw, 2.5rem);
+  }
+}
