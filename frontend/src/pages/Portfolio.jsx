@@ -1,43 +1,51 @@
 import { useMemo, useState } from 'react';
 import ProjectCard from '../components/ProjectCard.jsx';
-import { projects } from '../data/projects.js';
 import styles from '../styles/Portfolio.module.css';
+import { useData } from '../store/DataContext.jsx';
 
 const Portfolio = () => {
-  const [activeFilter, setActiveFilter] = useState('All');
+  const { data } = useData();
+  const [activeFilter, setActiveFilter] = useState('all');
 
-  const filters = useMemo(() => {
-    const serviceSet = new Set();
-    projects.forEach((project) => {
-      project.services.forEach((service) => serviceSet.add(service));
-    });
-    return ['All', ...serviceSet];
-  }, []);
+  const filterOptions = useMemo(
+    () => [{ id: 'all', name: 'All' }, ...data.collections],
+    [data.collections]
+  );
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === 'All') return projects;
-    return projects.filter((project) => project.services.includes(activeFilter));
-  }, [activeFilter]);
+    if (activeFilter === 'all') return data.projects;
+    return data.projects.filter((project) => project.collectionId === activeFilter);
+  }, [activeFilter, data.projects]);
+
+  const activeCollection =
+    activeFilter === 'all' ? null : data.collections.find((collection) => collection.id === activeFilter);
 
   return (
     <div className={styles.section}>
       <div className={styles.intro}>
-        <h1>Portfolio</h1>
-        <p>
-          A living archive of coral couture, sensorial installations, and science-led pilgrimages. Filter by discipline to glimpse how we translate briefs into layered textures, moving images, and restorative gatherings.
-        </p>
+        <h1>{data.portfolio.introTitle}</h1>
+        <p>{data.portfolio.introDescription}</p>
         <div className={styles.filters}>
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              className={`${styles.filterButton} ${activeFilter === filter ? styles.filterActive : ''}`.trim()}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {filter}
-            </button>
-          ))}
+          <span className={styles.filtersLabel}>{data.portfolio.filtersLabel}</span>
+          <div className={styles.filtersChips}>
+            {filterOptions.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`${styles.filterButton} ${activeFilter === option.id ? styles.filterActive : ''}`.trim()}
+                onClick={() => setActiveFilter(option.id)}
+              >
+                {option.name}
+              </button>
+            ))}
+          </div>
         </div>
+        {activeCollection ? (
+          <div className={styles.collectionSummary}>
+            <p>{activeCollection.description}</p>
+            {activeCollection.mood ? <span>{activeCollection.mood}</span> : null}
+          </div>
+        ) : null}
       </div>
       <div className={styles.masonry}>
         {filteredProjects.map((project) => (

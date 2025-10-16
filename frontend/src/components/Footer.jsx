@@ -34,10 +34,13 @@ const Footer = () => {
         <NavLink to="/portfolio" onClick={(event) => handleNavClick(event, { to: '/portfolio', section: 'portfolio' })}>
           Portfolio
         </NavLink>
-        <a href="mailto:hello@coralstudio.org">Contact</a>
+        <a href="mailto:hello@coralatelier.studio">Contact</a>
+        <NavLink to="/admin" className="visuallyHidden">
+          Admin
+        </NavLink>
       </div>
       <p className={styles.footerSmall}>
-        © {year} Coral Portfolio Studio. Crafted with tides, textiles, and community guardians to amplify coral futures.
+        © {year} Coral Atelier. Fashion print stories composed with coastal botanicals and luminous color.
       </p>
     </footer>
   );

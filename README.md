@@ -1,19 +1,19 @@
-# Coral Portfolio
+# Coral Atelier Portfolio
 
-This repository contains the Coral Portfolio front-end experience, a React single-page application built with Vite. The interface showcases coral-focused storytelling projects with responsive layouts, image-forward galleries, and dedicated project detail views.
+This repository contains a fully client-side freelancer portfolio for a fashion print designer. The React/Vite single-page
+application delivers a responsive, image-forward experience for showcasing collections and managing content via a password-
+protected admin studio.
 
 ## Front-end application
 
-The React application lives in [`frontend/`](frontend/) and ships with the following key features:
+The React application lives in [`frontend/`](frontend/) and includes:
 
-- Routing for the home, about, portfolio, and project detail pages using React Router.
-- Reusable layout components (`Header`, `Footer`) and project-focused UI (`ProjectCard`, `GalleryModal`).
-- Full-screen, scroll-snapped sections with smooth anchor navigation and a print-inspired, pastel palette.
-- Responsive masonry-style grids, modal galleries, and hover interactions implemented with CSS modules.
-- Centralized project data for driving cards and detail views.
-- Print-forward typography, collage hero treatments, and refined cards evoking a textile design portfolio.
+- Landing layout with scroll-snapped Home, About, and Portfolio sections.
+- Dynamic project cards, project detail pages with modal galleries, and responsive masonry layouts.
+- A lightweight data layer backed by `localStorage`, seeded with couture-inspired sample content.
+- Password-protected admin tools for editing page copy, managing collections, and curating project metadata/galleries.
 
-### Getting started
+### Running locally
 
 ```bash
 cd frontend
@@ -21,9 +21,18 @@ npm install
 npm run dev
 ```
 
-The development server runs on [http://localhost:5173](http://localhost:5173) by default. Use `npm run build` to create a production bundle and `npm run preview` to test the optimized output.
+The development server runs on [http://localhost:5173](http://localhost:5173) by default. Use `npm run build` to produce an
+optimized bundle and `npm run preview` to review the production build.
 
-## Project structure
+### Admin studio access
+
+- Navigate to `/admin` (a visually hidden link also lives in the footer).
+- Enter the default password: **`atelier2024`**.
+- All edits persist to your browser’s `localStorage`. Use the **Reset to defaults** button in the admin header to restore the
+  original sample content.
+- Update the password from the “Account” panel; changes apply only to the current browser/device.
+
+### Project structure
 
 ```
 frontend/
@@ -33,10 +42,22 @@ frontend/
 │   ├── App.jsx
 │   ├── main.jsx
 │   ├── components/
+│   │   ├── admin/
+│   │   └── …
 │   ├── data/
+│   │   └── defaultData.js
+│   ├── store/
+│   │   └── DataContext.jsx
 │   ├── pages/
 │   └── styles/
 └── vite.config.js
 ```
 
-Feel free to extend the project data, add CMS integrations, or connect the front end to an API as future enhancements.
+### Data flow highlights
+
+- `src/data/defaultData.js` seeds home/about copy, collections, and three sample projects (with galleries and metadata).
+- `src/store/DataContext.jsx` loads stored content, exposes CRUD helpers for admin tools, and persists changes to
+  `localStorage`.
+- Admin components under `src/components/admin/` orchestrate editing forms for each section of the site.
+
+Feel free to adapt the styling, extend the data model, or connect the store to a lightweight backend if needed.

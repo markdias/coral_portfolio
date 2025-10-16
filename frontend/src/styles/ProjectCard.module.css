@@ -24,6 +24,13 @@
   overflow: hidden;
 }
 
+.imagePlaceholder {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(243, 226, 218, 0.6), rgba(224, 209, 232, 0.6));
+  color: rgba(47, 37, 35, 0.6);
+}
+
 .imageWrap::after {
   content: '';
   position: absolute;
@@ -49,6 +56,14 @@
 .card:hover .imageWrap::after,
 .card:focus-within .imageWrap::after {
   opacity: 1;
+}
+
+.placeholderLabel {
+  font-size: 0.75rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 1.5rem;
 }
 
 .content {

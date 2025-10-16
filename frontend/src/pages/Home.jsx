@@ -1,34 +1,37 @@
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 import ProjectCard from '../components/ProjectCard.jsx';
-import { projects } from '../data/projects.js';
 import pageStyles from '../styles/PageSections.module.css';
 import portfolioStyles from '../styles/Portfolio.module.css';
+import { useData } from '../store/DataContext.jsx';
 
 const Home = () => {
-  const featuredProjects = projects.slice(0, 3);
+  const { data } = useData();
+  const featuredProjects = useMemo(() => data.projects.slice(0, 3), [data.projects]);
+  const heroImage = data.home.heroImage || data.projects[0]?.coverImage;
 
   return (
     <div className={pageStyles.hero}>
       <div className={pageStyles.heroContent}>
-        <span className={pageStyles.heroEyebrow}>Ocean atelier</span>
-        <h1 className={pageStyles.heroTitle}>
-          Tailored textiles and image worlds for living reefs
-        </h1>
-        <p className={pageStyles.heroDescription}>
-          Coral Portfolio Studio shapes tactile narratives that slip between couture, conservation, and culture. We drape coral science in sumptuous palettes, choreographing installations, lookbooks, and rituals that feel as intimate as a fitting and as expansive as the tide.
-        </p>
+        {data.home.eyebrow ? <span className={pageStyles.heroEyebrow}>{data.home.eyebrow}</span> : null}
+        <h1 className={pageStyles.heroTitle}>{data.home.title}</h1>
+        <p className={pageStyles.heroDescription}>{data.home.description}</p>
         <div className={portfolioStyles.heroActions}>
-          <Link to="/portfolio" className={portfolioStyles.primaryButton}>
-            View portfolio
-          </Link>
-          <Link to="/about" className={portfolioStyles.secondaryLink}>
-            Studio ethos
-          </Link>
+          {data.home.primaryCta?.href ? (
+            <Link to={data.home.primaryCta.href} className={portfolioStyles.primaryButton}>
+              {data.home.primaryCta.label || 'Explore portfolio'}
+            </Link>
+          ) : null}
+          {data.home.secondaryCta?.href ? (
+            <Link to={data.home.secondaryCta.href} className={portfolioStyles.secondaryLink}>
+              {data.home.secondaryCta.label || 'About'}
+            </Link>
+          ) : null}
         </div>
       </div>
       <div className={pageStyles.heroMedia}>
-        <img src={projects[0].heroImage} alt={projects[0].title} loading="lazy" />
-        <span className={pageStyles.heroRibbon}>Limited tide edition</span>
+        {heroImage ? <img src={heroImage} alt={data.home.title} loading="lazy" /> : null}
+        <span className={pageStyles.heroRibbon}>Limited print editions</span>
       </div>
       <div className={portfolioStyles.featuredCarousel}>
         {featuredProjects.map((project) => (
