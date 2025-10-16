@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import pageStyles from '../styles/PageSections.module.css';
 import portfolioStyles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
+import { asset } from '../utils/asset.js';
 
 const Home = () => {
   const { data } = useData();
@@ -27,7 +28,7 @@ const Home = () => {
         </div>
       </div>
       <div className={pageStyles.heroMedia}>
-        {heroImage ? <img src={heroImage} alt={data.home.title} loading="lazy" /> : null}
+        {heroImage ? <img src={asset(heroImage)} alt={data.home.title} loading="lazy" /> : null}
         <span className={pageStyles.heroRibbon}>Limited print editions</span>
       </div>
     </div>
