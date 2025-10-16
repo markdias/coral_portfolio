@@ -53,6 +53,21 @@ const HomeEditor = ({ home, onSave }) => (
         </div>
       </div>
       <div className={styles.fieldGroup}>
+        <label htmlFor="home-ribbon">Hero ribbon label</label>
+        <div className={styles.inlineFields}>
+          <input
+            id="home-ribbon"
+            type="text"
+            value={home.ribbonText || ''}
+            onChange={(e) => onSave({ ribbonText: e.target.value })}
+            placeholder="Limited print editions"
+          />
+          <button type="button" className={styles.iconButton} aria-label="Clear" onClick={() => onSave({ ribbonText: '' })}>
+            ×
+          </button>
+        </div>
+      </div>
+      <div className={styles.fieldGroup}>
         <label htmlFor="home-primary-label">Primary CTA label</label>
         <div className={styles.inlineFields}>
           <input

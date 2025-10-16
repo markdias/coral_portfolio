@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../styles/Layout.module.css';
+import { useData } from '../store/DataContext.jsx';
+import { asset } from '../utils/asset.js';
 
 const navItems = [
   { to: '/', label: 'Home', section: 'home' },
@@ -10,6 +12,7 @@ const navItems = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data } = useData();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -47,8 +50,12 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.headerInner}>
         <NavLink to="/" className={styles.brand}>
-          <span className={styles.brandAccent} aria-hidden="true" />
-          Coral Dias
+          {data?.settings?.logo ? (
+            <img className={styles.brandLogo} src={asset(data.settings.logo)} alt="Site logo" />
+          ) : (
+            <span className={styles.brandAccent} aria-hidden="true" />
+          )}
+          {data?.settings?.siteTitle || 'Coral Dias'}
         </NavLink>
         <button
           className={styles.mobileMenuButton}

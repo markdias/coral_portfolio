@@ -39,6 +39,15 @@
   box-shadow: 0 10px 24px rgba(199, 169, 209, 0.32);
 }
 
+.brandLogo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 6px 16px rgba(47, 37, 35, 0.12);
+}
+
 .navList {
   display: flex;
   align-items: center;

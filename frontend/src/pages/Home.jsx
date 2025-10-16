@@ -29,7 +29,9 @@ const Home = () => {
       </div>
       <div className={pageStyles.heroMedia}>
         {heroImage ? <img src={asset(heroImage)} alt={data.home.title} loading="lazy" /> : null}
-        <span className={pageStyles.heroRibbon}>Limited print editions</span>
+        <span className={pageStyles.heroRibbon}>
+          {(data.home.ribbonText || 'Limited print editions')}
+        </span>
       </div>
     </div>
   );

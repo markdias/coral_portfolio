@@ -63,6 +63,15 @@ export const DataProvider = ({ children }) => {
     return res;
   };
 
+  const updateSettings = (updates) =>
+    setData((prev) => ({
+      ...prev,
+      settings: {
+        ...prev.settings,
+        ...updates
+      }
+    }));
+
   const updateHome = (updates) =>
     setData((prev) => ({
       ...prev,
@@ -255,6 +264,7 @@ export const DataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       data,
+      updateSettings,
       updateHome,
       updateAbout,
       updatePortfolio,
