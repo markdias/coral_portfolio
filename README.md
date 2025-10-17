@@ -58,6 +58,13 @@ current dataset to `frontend/src/data/defaultData.js`.
 The admin studio now includes a contact editor. You can add email, phone numbers, or any URL and the frontend will infer a
 matching icon automatically when visitors browse the contact section.
 
+### Image protection tools
+
+- Use the **Site settings → Image watermark** controls to configure the watermark text, opacity, and relative size. These
+  settings apply automatically to newly uploaded images (excluding the logo) through the admin media tools.
+- Uploaded images render with the configured watermark overlay in the public site, and right-click saving/dragging is
+  disabled to discourage casual downloads.
+
 ### Project structure
 
 ```

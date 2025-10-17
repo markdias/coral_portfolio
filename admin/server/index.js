@@ -5,6 +5,7 @@ import fs from 'node:fs/promises';
 import dotenv from 'dotenv';
 import { pathToFileURL } from 'node:url';
 import multer from 'multer';
+import sharp from 'sharp';
 
 dotenv.config();
 
@@ -193,12 +194,81 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.post('/api/media/upload', requireAdmin, upload.single('file'), (req, res) => {
+const clampNumber = (value, min, max, fallback) => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.min(Math.max(number, min), max);
+};
+
+const escapeForSvg = (value) =>
+  (value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const parseWatermarkSettings = (input) => {
+  if (!input) return { enabled: false, text: '', opacity: 0.08, scale: 1 };
+  try {
+    const parsed = typeof input === 'string' ? JSON.parse(input) : input;
+    return {
+      enabled: Boolean(parsed?.enabled),
+      text: typeof parsed?.text === 'string' ? parsed.text : '',
+      opacity: clampNumber(parsed?.opacity, 0, 1, 0.08),
+      scale: clampNumber(parsed?.scale, 0.25, 4, 1)
+    };
+  } catch (_) {
+    return { enabled: false, text: '', opacity: 0.08, scale: 1 };
+  }
+};
+
+async function applyWatermark(filePath, watermark) {
+  const text = watermark.text?.trim();
+  if (!watermark.enabled || !text) return;
+
+  const metadata = await sharp(filePath).metadata();
+  const { width, height } = metadata;
+
+  if (!width || !height) return;
+
+  const shortestSide = Math.min(width, height);
+  const tileSize = Math.max(160, Math.round((shortestSide / 3) * watermark.scale));
+  const fontSize = Math.max(24, Math.round((shortestSide / 12) * watermark.scale));
+  const fill = `rgba(255, 255, 255, ${watermark.opacity})`;
+
+  const svg = `<?xml version="1.0" encoding="UTF-8"?>` +
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+    `<defs>` +
+    `<pattern id="watermark-pattern" patternUnits="userSpaceOnUse" width="${tileSize}" height="${tileSize}">` +
+    `<text x="${tileSize / 2}" y="${tileSize / 2}" text-anchor="middle" dominant-baseline="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${fontSize}" font-weight="600" fill="${fill}" opacity="${watermark.opacity}" transform="rotate(-30 ${tileSize / 2} ${tileSize / 2})">${escapeForSvg(text)}</text>` +
+    `</pattern>` +
+    `</defs>` +
+    `<rect width="100%" height="100%" fill="url(#watermark-pattern)" />` +
+    `</svg>`;
+
+  const buffer = await sharp(filePath)
+    .composite([{ input: Buffer.from(svg) }])
+    .toBuffer();
+
+  await fs.writeFile(filePath, buffer);
+}
+
+app.post('/api/media/upload', requireAdmin, upload.single('file'), async (req, res) => {
   try {
     const scope = (req.query.scope || '').toString();
     const parentId = (req.query.parentId || '').toString();
     const filename = req.file?.filename;
     if (!filename) return res.status(400).send('No file uploaded');
+
+    const destination = req.file?.destination;
+    const filePath = destination ? path.join(destination, filename) : req.file?.path;
+    const watermark = parseWatermarkSettings(req.body?.watermark);
+
+    if (filePath && req.file?.mimetype?.startsWith('image/') && watermark.enabled) {
+      await applyWatermark(filePath, watermark);
+    }
+
     const parts = ['/images'];
     if (scope) parts.push(scope);
     if (parentId) parts.push(parentId);

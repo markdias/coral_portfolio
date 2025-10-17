@@ -3,6 +3,7 @@ import pageStyles from '../styles/PageSections.module.css';
 import portfolioStyles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
 import { asset } from '../utils/asset.js';
+import WatermarkedImage from '../components/WatermarkedImage.jsx';
 
 const Home = () => {
   const { data } = useData();
@@ -28,7 +29,9 @@ const Home = () => {
         </div>
       </div>
       <div className={pageStyles.heroMedia}>
-        {heroImage ? <img src={asset(heroImage)} alt={data.home.title} loading="lazy" /> : null}
+        {heroImage ? (
+          <WatermarkedImage src={asset(heroImage)} alt={data.home.title} loading="lazy" />
+        ) : null}
         <span className={pageStyles.heroRibbon}>
           {(data.home.ribbonText || 'Limited print editions')}
         </span>
