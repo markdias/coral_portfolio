@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import styles from '../styles/Layout.module.css';
 import { useData } from '../store/DataContext.jsx';
 import { asset } from '../utils/asset.js';
@@ -16,7 +16,6 @@ const Header = () => {
   const headerRef = useRef(null);
   const { data } = useData();
   const location = useLocation();
-  const navigate = useNavigate();
 
   useLayoutEffect(() => {
     const headerNode = headerRef.current;
@@ -64,17 +63,11 @@ const Header = () => {
   };
 
   const handleNavClick = (event, item) => {
-    event.preventDefault();
+    const isSamePath = location.pathname === item.to;
 
-    const runScroll = () => {
+    if (isSamePath) {
+      event.preventDefault();
       window.requestAnimationFrame(() => scrollToSection(item.section));
-    };
-
-    if (location.pathname !== item.to) {
-      navigate(item.to);
-      setTimeout(runScroll, 80);
-    } else {
-      runScroll();
     }
 
     setMenuOpen(false);
