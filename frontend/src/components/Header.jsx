@@ -7,7 +7,8 @@ import { asset } from '../utils/asset.js';
 const navItems = [
   { to: '/', label: 'Home', section: 'home' },
   { to: '/about', label: 'About', section: 'about' },
-  { to: '/portfolio', label: 'Portfolio', section: 'portfolio' }
+  { to: '/portfolio', label: 'Portfolio', section: 'portfolio' },
+  { to: '/contact', label: 'Contact', section: 'contact' }
 ];
 
 const Header = () => {

@@ -99,6 +99,80 @@ export const DataProvider = ({ children }) => {
       }
     }));
 
+  const updateContact = (updates) =>
+    setData((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        ...updates
+      }
+    }));
+
+  const addContactMethod = (entry = {}) => {
+    const newEntry = {
+      id: createId('contact'),
+      label: '',
+      value: '',
+      displayValue: '',
+      note: '',
+      ...entry
+    };
+
+    setData((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        entries: [...(prev.contact?.entries || []), newEntry]
+      }
+    }));
+
+    return newEntry.id;
+  };
+
+  const updateContactMethod = (entryId, updates) =>
+    setData((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        entries: (prev.contact?.entries || []).map((entry) =>
+          entry.id === entryId
+            ? {
+                ...entry,
+                ...updates
+              }
+            : entry
+        )
+      }
+    }));
+
+  const removeContactMethod = (entryId) =>
+    setData((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        entries: (prev.contact?.entries || []).filter((entry) => entry.id !== entryId)
+      }
+    }));
+
+  const moveContactMethod = (entryId, direction) => {
+    const delta = direction === 'up' ? -1 : 1;
+    setData((prev) => {
+      const entries = [...(prev.contact?.entries || [])];
+      const currentIndex = entries.findIndex((entry) => entry.id === entryId);
+      if (currentIndex < 0) return prev;
+      const nextIndex = currentIndex + delta;
+      if (nextIndex < 0 || nextIndex >= entries.length) return prev;
+      [entries[currentIndex], entries[nextIndex]] = [entries[nextIndex], entries[currentIndex]];
+      return {
+        ...prev,
+        contact: {
+          ...prev.contact,
+          entries
+        }
+      };
+    });
+  };
+
   const addCollection = (collection) => {
     const newCollection = {
       id: createId('collection'),
@@ -267,6 +341,7 @@ export const DataProvider = ({ children }) => {
       updateSettings,
       updateHome,
       updateAbout,
+      updateContact,
       updatePortfolio,
       addCollection,
       updateCollection,
@@ -274,6 +349,10 @@ export const DataProvider = ({ children }) => {
       addProject,
       updateProject,
       removeProject,
+      addContactMethod,
+      updateContactMethod,
+      removeContactMethod,
+      moveContactMethod,
       login,
       logout,
       isAuthenticated,

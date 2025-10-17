@@ -3,18 +3,21 @@ import { useLocation } from 'react-router-dom';
 import Home from './Home.jsx';
 import About from './About.jsx';
 import Portfolio from './Portfolio.jsx';
+import Contact from './Contact.jsx';
 import styles from '../styles/ScrollSections.module.css';
 
 const sections = [
   { id: 'home', Component: Home, toneClass: styles.homeTone },
   { id: 'about', Component: About, toneClass: styles.aboutTone },
-  { id: 'portfolio', Component: Portfolio, toneClass: styles.portfolioTone }
+  { id: 'portfolio', Component: Portfolio, toneClass: styles.portfolioTone },
+  { id: 'contact', Component: Contact, toneClass: styles.contactTone }
 ];
 
 const pathToSectionMap = {
   '/': 'home',
   '/about': 'about',
-  '/portfolio': 'portfolio'
+  '/portfolio': 'portfolio',
+  '/contact': 'contact'
 };
 
 const Landing = () => {

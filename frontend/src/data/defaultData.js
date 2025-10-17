@@ -4,7 +4,7 @@ export const defaultData = {
     "adminPassword": "",
     "logo": "/images/home/ChatGPT_Image_Oct_16__2025_at_10_00_34_PM-1760648537214.png",
     "siteTitle": "Coral Dias",
-    "__contentVersion": 1760648924577
+    "__contentVersion": 1760648925577
   },
   "home": {
     "eyebrow": "Coral Dias Freelance Print Designer",
@@ -19,6 +19,34 @@ export const defaultData = {
       "href": "/portfolio"
     },
     "heroImage": "/images/home/ChatGPT_Image_Oct_16__2025_at_10_00_34_PM-1760648709841.png"
+  },
+  "contact": {
+    "eyebrow": "Collaborate",
+    "title": "Let's craft something unforgettable",
+    "description": "Reach out directly for commissions, licensing conversations, or to follow my studio journals across the web.",
+    "entries": [
+      {
+        "id": "contact-email",
+        "label": "Email",
+        "value": "hello@coralatelier.studio"
+      },
+      {
+        "id": "contact-phone",
+        "label": "Mobile",
+        "value": "+44 7700 900123",
+        "displayValue": "+44 7700 900123"
+      },
+      {
+        "id": "contact-linkedin",
+        "label": "LinkedIn",
+        "value": "https://www.linkedin.com/in/coraldias"
+      },
+      {
+        "id": "contact-instagram",
+        "label": "Instagram",
+        "value": "https://www.instagram.com/coral.prints"
+      }
+    ]
   },
   "about": {
     "eyebrow": "About Coral Dias",

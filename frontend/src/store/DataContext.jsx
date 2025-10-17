@@ -77,6 +77,15 @@ export const DataProvider = ({ children }) => {
       }
     }));
 
+  const updateContact = (updates) =>
+    setData((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        ...updates
+      }
+    }));
+
   const updatePortfolio = (updates) =>
     setData((prev) => ({
       ...prev,
@@ -203,6 +212,7 @@ export const DataProvider = ({ children }) => {
       data,
       updateHome,
       updateAbout,
+      updateContact,
       updatePortfolio,
       addCollection,
       updateCollection,
