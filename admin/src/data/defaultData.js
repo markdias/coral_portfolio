@@ -3,6 +3,10 @@ import { createId } from '../utils/id.js';
 const botanicalId = createId('collection');
 const tidalId = createId('collection');
 const chromaticId = createId('collection');
+const contactEmailId = createId('contact');
+const contactPhoneId = createId('contact');
+const contactLinkedInId = createId('contact');
+const contactInstagramId = createId('contact');
 
 const buildMetadata = (entries) =>
   entries.map(({ label, value }) => ({ id: createId('meta'), label, value }));
@@ -32,6 +36,38 @@ export const defaultData = {
     },
     heroImage:
       'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1600&q=80'
+  },
+  contact: {
+    eyebrow: 'Collaborate',
+    title: "Let's craft something unforgettable",
+    description:
+      'Reach out directly for commissions, licensing conversations, or to follow my studio journals across the web.',
+    entries: [
+      {
+        id: contactEmailId,
+        label: 'Email',
+        value: 'hello@coralatelier.studio'
+      },
+      {
+        id: contactPhoneId,
+        label: 'Mobile',
+        value: '+44 7700 900123',
+        displayValue: '+44 7700 900123',
+        note: 'Available weekdays 9am – 5pm GMT'
+      },
+      {
+        id: contactLinkedInId,
+        label: 'LinkedIn',
+        value: 'https://www.linkedin.com/in/coraldias',
+        note: 'Studio process notes and project snapshots'
+      },
+      {
+        id: contactInstagramId,
+        label: 'Instagram',
+        value: 'https://www.instagram.com/coral.prints',
+        note: 'Daily sketchbooks and underwater palettes'
+      }
+    ]
   },
   about: {
     eyebrow: 'About Isla Marin',

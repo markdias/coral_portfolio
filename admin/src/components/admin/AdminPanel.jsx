@@ -4,6 +4,7 @@ import { useData } from '../../store/DataContext.jsx';
 import HomeEditor from './HomeEditor.jsx';
 import AboutEditor from './AboutEditor.jsx';
 import PortfolioEditor from './PortfolioEditor.jsx';
+import ContactEditor from './ContactEditor.jsx';
 import CollectionsManager from './CollectionsManager.jsx';
 import ProjectsManager from './ProjectsManager.jsx';
 import SiteSettings from './SiteSettings.jsx';
@@ -14,6 +15,7 @@ const AdminPanel = () => {
     updateHome,
     updateAbout,
     updatePortfolio,
+    updateContact,
     updateSettings,
     addCollection,
     updateCollection,
@@ -21,6 +23,10 @@ const AdminPanel = () => {
     addProject,
     updateProject,
     removeProject,
+    addContactMethod,
+    updateContactMethod,
+    removeContactMethod,
+    moveContactMethod,
     logout,
     resetData,
     createId,
@@ -45,12 +51,13 @@ const AdminPanel = () => {
 
   const validateImported = (obj) => {
     if (!obj || typeof obj !== 'object') return 'Invalid file contents.';
-    const requiredTop = ['home', 'about', 'portfolio', 'collections', 'projects', 'settings'];
+    const requiredTop = ['home', 'about', 'portfolio', 'contact', 'collections', 'projects', 'settings'];
     for (const key of requiredTop) {
       if (!(key in obj)) return `Missing top-level key: ${key}`;
     }
     if (!Array.isArray(obj.collections)) return 'collections must be an array';
     if (!Array.isArray(obj.projects)) return 'projects must be an array';
+    if (!Array.isArray(obj.contact?.entries)) return 'contact.entries must be an array';
     return null;
   };
 
@@ -125,6 +132,7 @@ const AdminPanel = () => {
         <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
         <a href="#collections">Collections</a>
         <a href="#projects">Projects</a>
         <a href="#publish">Publish</a>
@@ -145,6 +153,17 @@ const AdminPanel = () => {
 
       <section id="portfolio">
         <PortfolioEditor portfolio={data.portfolio} onSave={updatePortfolio} />
+      </section>
+
+      <section id="contact">
+        <ContactEditor
+          contact={data.contact}
+          onSave={updateContact}
+          onAddEntry={addContactMethod}
+          onUpdateEntry={updateContactMethod}
+          onRemoveEntry={removeContactMethod}
+          onMoveEntry={moveContactMethod}
+        />
       </section>
 
       <section id="collections">
