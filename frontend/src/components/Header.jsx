@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import styles from '../styles/Layout.module.css';
 import { useData } from '../store/DataContext.jsx';
@@ -13,9 +13,42 @@ const navItems = [
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef(null);
   const { data } = useData();
   const location = useLocation();
   const navigate = useNavigate();
+
+  useLayoutEffect(() => {
+    const headerNode = headerRef.current;
+    if (!headerNode) {
+      return;
+    }
+
+    const updateHeaderHeight = () => {
+      const node = headerRef.current;
+      if (!node) return;
+      const { height } = node.getBoundingClientRect();
+      document.documentElement.style.setProperty('--header-height', `${Math.round(height)}px`);
+    };
+
+    updateHeaderHeight();
+
+    let resizeObserver;
+
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(updateHeaderHeight);
+      resizeObserver.observe(headerNode);
+    }
+
+    window.addEventListener('resize', updateHeaderHeight);
+
+    return () => {
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      window.removeEventListener('resize', updateHeaderHeight);
+    };
+  }, []);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -48,7 +81,7 @@ const Header = () => {
   };
 
   return (
-    <header className={styles.header}>
+    <header ref={headerRef} className={styles.header}>
       <div className={styles.headerInner}>
         <NavLink to="/" className={styles.brand}>
           {data?.settings?.logo ? (

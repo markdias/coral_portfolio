@@ -6,10 +6,11 @@
   /* Cohesive base background tone */
   --bg-base: #f7f4ef;
   --bg-ink: #2f2523;
+  --header-padding-y: clamp(1rem, 2.8vw, 1.6rem);
+  --header-height: calc((var(--header-padding-y) * 2) + 44px + env(safe-area-inset-top, 0px));
   line-height: 1.6;
   font-weight: 400;
   color-scheme: light;
-  --header-height: 96px;
 }
 
 html {

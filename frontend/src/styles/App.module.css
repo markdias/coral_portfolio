@@ -4,6 +4,7 @@
   flex-direction: column;
   background: transparent;
   color: #2f2523;
+  padding-top: var(--header-height);
 }
 
 .mainContent {
