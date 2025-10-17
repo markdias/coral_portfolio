@@ -7,7 +7,7 @@ export const defaultData = {
     "__contentVersion": 1760736642958,
     "watermarkText": "coraldias.co.uk",
     "watermarkEnabled": true,
-    "watermarkOpacity": 0.12,
+    "watermarkOpacity": 0.05,
     "watermarkScale": 1
   },
   "home": {

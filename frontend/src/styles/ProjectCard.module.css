@@ -41,19 +41,17 @@
   mix-blend-mode: multiply;
   opacity: 0;
   transition: opacity 240ms ease;
-  z-index: 1;
-  pointer-events: none;
 }
 
-.imageWrap :global(img) {
+.imageWrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 320ms ease;
 }
 
-.card:hover .imageWrap :global(img),
-.card:focus-within .imageWrap :global(img) {
+.card:hover .imageWrap img,
+.card:focus-within .imageWrap img {
   transform: scale(1.06);
 }
 
