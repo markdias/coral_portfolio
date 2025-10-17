@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import styles from '../styles/Layout.module.css';
 import { useData } from '../store/DataContext.jsx';
-import WatermarkedImage from './WatermarkedImage.jsx';
+import { asset } from '../utils/asset.js';
 
 const navItems = [
   { to: '/', label: 'Home', section: 'home' },
@@ -78,14 +78,7 @@ const Header = () => {
       <div className={styles.headerInner}>
         <NavLink to="/" className={styles.brand}>
           {data?.settings?.logo ? (
-            <WatermarkedImage
-              className={styles.brandLogo}
-              imgClassName={styles.brandLogoImage}
-              src={data.settings.logo}
-              alt="Site logo"
-              disableWatermark
-              loading="eager"
-            />
+            <img className={styles.brandLogo} src={asset(data.settings.logo)} alt="Site logo" />
           ) : (
             <span className={styles.brandAccent} aria-hidden="true" />
           )}
