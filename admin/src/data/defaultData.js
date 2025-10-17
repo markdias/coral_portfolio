@@ -18,7 +18,11 @@ export const defaultData = {
   settings: {
     adminPassword: '',
     siteTitle: 'Coral Dias',
-    logo: ''
+    logo: '',
+    watermarkEnabled: true,
+    watermarkText: 'coraldias.co.uk',
+    watermarkOpacity: 0.08,
+    watermarkScale: 1
   },
   home: {
     eyebrow: 'Surface pattern dias',

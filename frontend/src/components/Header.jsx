@@ -78,7 +78,12 @@ const Header = () => {
       <div className={styles.headerInner}>
         <NavLink to="/" className={styles.brand}>
           {data?.settings?.logo ? (
-            <img className={styles.brandLogo} src={asset(data.settings.logo)} alt="Site logo" />
+            <img
+              className={styles.brandLogo}
+              src={asset(data.settings.logo)}
+              alt="Site logo"
+              onContextMenu={(event) => event.preventDefault()}
+            />
           ) : (
             <span className={styles.brandAccent} aria-hidden="true" />
           )}

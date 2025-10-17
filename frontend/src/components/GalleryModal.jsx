@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles/GalleryModal.module.css';
 import { asset } from '../utils/asset.js';
+import WatermarkedImage from './WatermarkedImage.jsx';
 
 const GalleryModal = ({ image, onClose }) => {
   useEffect(() => {
@@ -32,7 +33,7 @@ const GalleryModal = ({ image, onClose }) => {
           ✕
         </button>
         <figure>
-          <img src={asset(image.src)} alt={image.alt} />
+          <WatermarkedImage src={asset(image.src)} alt={image.alt} />
           {image.alt ? <figcaption>{image.alt}</figcaption> : null}
         </figure>
       </div>

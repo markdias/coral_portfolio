@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import styles from '../../styles/Admin.module.css';
+import { useData } from '../../store/DataContext.jsx';
 
-const UploadButton = ({ label = 'Upload', scope, parentId, onUploaded }) => {
+const UploadButton = ({ label = 'Upload', scope, parentId, onUploaded, disableWatermark = false }) => {
   const inputId = `file-input-${scope}-${parentId || 'root'}-${Math.random().toString(36).slice(2, 6)}`;
+  const { data } = useData();
 
   const handleFiles = async (file) => {
     if (!file) return;
@@ -12,6 +14,15 @@ const UploadButton = ({ label = 'Upload', scope, parentId, onUploaded }) => {
 
     const form = new FormData();
     form.append('file', file);
+
+    const watermarkPayload = {
+      enabled: !disableWatermark && Boolean(data?.settings?.watermarkEnabled),
+      text: (data?.settings?.watermarkText || '').trim(),
+      opacity: data?.settings?.watermarkOpacity,
+      scale: data?.settings?.watermarkScale
+    };
+
+    form.append('watermark', JSON.stringify(watermarkPayload));
 
     try {
       const res = await fetch(`/api/media/upload?${params.toString()}`, {
@@ -58,7 +69,8 @@ UploadButton.propTypes = {
   label: PropTypes.string,
   scope: PropTypes.oneOf(['projects', 'collections', 'home', 'about', 'portfolio']).isRequired,
   parentId: PropTypes.string,
-  onUploaded: PropTypes.func.isRequired
+  onUploaded: PropTypes.func.isRequired,
+  disableWatermark: PropTypes.bool
 };
 
 export default UploadButton;

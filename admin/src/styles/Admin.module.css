@@ -199,6 +199,23 @@
   color: rgba(27, 28, 38, 0.8);
 }
 
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkboxRow input[type='checkbox'] {
+  width: auto;
+  height: auto;
+}
+
+.fieldHint {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: rgba(27, 28, 38, 0.6);
+}
+
 .iconButton:hover,
 .iconButton:focus-visible {
   transform: translateY(-1px);
