@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from '../styles/ProjectCard.module.css';
-import { asset } from '../utils/asset.js';
+import WatermarkedImage from './WatermarkedImage.jsx';
 
 const getMetaValue = (project, label) =>
   project.metadata?.find((item) => item.label.toLowerCase() === label.toLowerCase())?.value;
@@ -19,7 +19,7 @@ const ProjectCard = ({ project, variant = 'default' }) => {
         className={`${styles.imageWrap} ${coverImage ? '' : styles.imagePlaceholder}`.trim()}
       >
         {coverImage ? (
-          <img src={asset(coverImage)} alt={project.title} loading="lazy" />
+          <WatermarkedImage src={coverImage} alt={project.title} loading="lazy" />
         ) : (
           <span className={styles.placeholderLabel}>Cover image coming soon</span>
         )}
