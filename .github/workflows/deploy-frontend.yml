@@ -34,8 +34,6 @@ jobs:
 
       - name: Build frontend
         working-directory: frontend
-        env:
-          VITE_BASE: /${{ github.event.repository.name }}/
         run: npm run build
 
       - name: Upload Pages artifact
@@ -53,4 +51,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
