@@ -1,5 +1,6 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import Home from './Home.jsx';
 import About from './About.jsx';
 import Portfolio from './Portfolio.jsx';
@@ -22,6 +23,15 @@ const pathToSectionMap = {
 
 const Landing = () => {
   const location = useLocation();
+  const scrollContainerRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ container: scrollContainerRef });
+  const progressSpring = useSpring(scrollYProgress, {
+    stiffness: 160,
+    damping: 32,
+    restDelta: 0.001
+  });
+  const auraOpacity = useTransform(progressSpring, [0, 1], [0.08, 0.32]);
   const targetSection = useMemo(
     () => pathToSectionMap[location.pathname] ?? 'home',
     [location.pathname]
@@ -39,11 +49,33 @@ const Landing = () => {
   }, [targetSection]);
 
   return (
-    <div className={styles.snapWrapper}>
+    <div ref={scrollContainerRef} className={styles.snapWrapper}>
+      {shouldReduceMotion ? null : (
+        <>
+          <motion.span
+            aria-hidden="true"
+            className={styles.progressIndicator}
+            style={{ scaleX: progressSpring }}
+          />
+          <motion.span
+            aria-hidden="true"
+            className={styles.scrollAura}
+            style={{ opacity: auraOpacity }}
+          />
+        </>
+      )}
       {sections.map(({ id, Component, toneClass }) => (
-        <section key={id} id={id} className={`${styles.snapSection} ${toneClass}`.trim()}>
+        <motion.section
+          key={id}
+          id={id}
+          className={`${styles.snapSection} ${toneClass}`.trim()}
+          initial={shouldReduceMotion ? undefined : { opacity: 0, y: 120 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        >
           <Component />
-        </section>
+        </motion.section>
       ))}
     </div>
   );

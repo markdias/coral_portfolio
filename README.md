@@ -9,6 +9,7 @@ in a separate, local-only app.
 The React application lives in [`frontend/`](frontend/) and includes:
 
 - Landing layout with scroll-snapped Home, About, and Portfolio sections.
+- High-polish art direction with animated section reveals powered by [`framer-motion`](https://www.framer.com/motion/).
 - Contact section with automatically detected icons for email, phone, and social links.
 - Dynamic project cards, project detail pages with modal galleries, and responsive masonry layouts.
 - A lightweight data layer backed by `localStorage`, seeded with couture-inspired sample content.

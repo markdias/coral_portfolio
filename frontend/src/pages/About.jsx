@@ -1,5 +1,6 @@
 import pageStyles from '../styles/PageSections.module.css';
 import { useData } from '../store/DataContext.jsx';
+import Reveal from '../components/Reveal.jsx';
 
 const About = () => {
   const { data } = useData();
@@ -7,27 +8,35 @@ const About = () => {
 
   return (
     <div className={pageStyles.gridTwoColumn}>
-      <div className={pageStyles.textBlock}>
-        {about.eyebrow ? <span className={pageStyles.heroEyebrow}>{about.eyebrow}</span> : null}
-        <h1>{about.title}</h1>
+      <Reveal as="div" className={pageStyles.textBlock}>
+        {about.eyebrow ? (
+          <Reveal as="span" className={pageStyles.heroEyebrow} delay={0.05}>
+            {about.eyebrow}
+          </Reveal>
+        ) : null}
+        <Reveal as="h1" delay={0.1}>
+          {about.title}
+        </Reveal>
         {about.paragraphs?.map((paragraph, index) => (
-          <p key={`${paragraph.slice(0, 24)}-${index}`}>{paragraph}</p>
+          <Reveal as="p" key={`${paragraph.slice(0, 24)}-${index}`} delay={0.14 + index * 0.08}>
+            {paragraph}
+          </Reveal>
         ))}
         {about.capabilities?.length ? (
-          <div className={pageStyles.callout}>
+          <Reveal as="div" className={pageStyles.callout} delay={0.26}>
             <strong>Capabilities</strong>
             <span>
               {about.capabilities.join(' • ')}
             </span>
-          </div>
+          </Reveal>
         ) : null}
-      </div>
+      </Reveal>
       <div className={pageStyles.gridTwoColumn}>
-        {about.stats?.map((stat) => (
-          <div key={stat.id} className={pageStyles.statBlock}>
+        {about.stats?.map((stat, index) => (
+          <Reveal as="div" key={stat.id} className={pageStyles.statBlock} delay={0.18 + index * 0.08}>
             <p className={pageStyles.statValue}>{stat.value}</p>
             <p className={pageStyles.statLabel}>{stat.label}</p>
-          </div>
+          </Reveal>
         ))}
       </div>
     </div>
