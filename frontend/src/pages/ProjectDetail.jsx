@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import GalleryModal from '../components/GalleryModal.jsx';
+import WatermarkedImage from '../components/WatermarkedImage.jsx';
 import styles from '../styles/ProjectDetail.module.css';
 import pageStyles from '../styles/PageSections.module.css';
 import { useData } from '../store/DataContext.jsx';
-import { asset } from '../utils/asset.js';
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
@@ -68,7 +68,7 @@ const ProjectDetail = () => {
 
       {project.coverImage ? (
         <div className={styles.heroImage}>
-          <img src={asset(project.coverImage)} alt={project.title} />
+          <WatermarkedImage src={project.coverImage} alt={project.title} />
         </div>
       ) : null}
 
@@ -95,7 +95,7 @@ const ProjectDetail = () => {
           <div className={styles.galleryGrid}>
             {project.gallery?.map((image) => (
               <button type="button" key={image.id} onClick={() => setSelectedImage(image)}>
-                <img src={asset(image.src)} alt={image.alt} loading="lazy" />
+                <WatermarkedImage src={image.src} alt={image.alt} loading="lazy" />
               </button>
             ))}
             {project.gallery?.length === 0 ? <p className={pageStyles.heroDescription}>No gallery images yet.</p> : null}

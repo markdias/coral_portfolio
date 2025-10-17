@@ -11,6 +11,7 @@ The React application lives in [`frontend/`](frontend/) and includes:
 - Landing layout with scroll-snapped Home, About, and Portfolio sections.
 - Contact section with automatically detected icons for email, phone, and social links.
 - Dynamic project cards, project detail pages with modal galleries, and responsive masonry layouts.
+- Configurable watermark overlay that protects every portfolio image and blocks right-click saving.
 - A lightweight data layer backed by `localStorage`, seeded with couture-inspired sample content.
 
 ### Running locally
@@ -28,6 +29,9 @@ optimized bundle and `npm run preview` to review the production build.
 
 The admin studio lives in `admin/` and is not part of the public site. It runs only on localhost and can publish updates by
 writing directly to `frontend/src/data/defaultData.js` on your machine.
+
+Watermark settings (toggle, text, size, and opacity) live in the **Site settings** panel. Adjust them locally and publish to
+propagate the changes to the public site.
 
 ### Configure admin password
 
