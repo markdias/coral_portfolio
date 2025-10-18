@@ -6,10 +6,10 @@ import PublishButton from './PublishButton.jsx';
 
 const CollectionsManager = ({ collections, projects, onAddCollection, onUpdateCollection, onRemoveCollection }) => (
   <div className={styles.panelCard}>
-    <h2 className={styles.panelTitle}>Collections</h2>
-    <div className={styles.buttonRow}>
+    <div className={`${styles.buttonRow} ${styles.panelToolbar}`}>
       <PublishButton label="Publish collections" />
     </div>
+    <h2 className={styles.panelTitle}>Collections</h2>
     <div className={styles.buttonRow}>
       <button type="button" className={styles.secondaryButton} onClick={() => onAddCollection({})}>
         <span className={styles.buttonIcon}>➕</span> Add collection

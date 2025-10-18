@@ -16,10 +16,10 @@ const ProjectsManager = ({ projects, collections, onAddProject, onUpdateProject,
 
   return (
     <div className={styles.panelCard}>
-      <h2 className={styles.panelTitle}>Projects</h2>
-      <div className={styles.buttonRow}>
+      <div className={`${styles.buttonRow} ${styles.panelToolbar}`}>
         <PublishButton label="Publish projects" />
       </div>
+      <h2 className={styles.panelTitle}>Projects</h2>
       <div className={styles.buttonRow}>
         <button type="button" className={styles.secondaryButton} onClick={() => onAddProject({})}>
           <span className={styles.buttonIcon}>➕</span> Add project

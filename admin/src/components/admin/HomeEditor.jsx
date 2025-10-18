@@ -5,10 +5,10 @@ import PublishButton from './PublishButton.jsx';
 
 const HomeEditor = ({ home, onSave }) => (
   <div className={styles.panelCard}>
-    <h2 className={styles.panelTitle}>Home</h2>
-    <div className={styles.buttonRow}>
+    <div className={`${styles.buttonRow} ${styles.panelToolbar}`}>
       <PublishButton label="Publish home" />
     </div>
+    <h2 className={styles.panelTitle}>Home</h2>
     <div className={styles.fieldGrid}>
       <div className={styles.fieldGroup}>
         <label htmlFor="home-eyebrow">Eyebrow</label>

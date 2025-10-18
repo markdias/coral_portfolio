@@ -7,13 +7,13 @@ const ContactEditor = ({ contact, onSave, onAddEntry, onUpdateEntry, onRemoveEnt
 
   return (
     <div className={styles.panelCard}>
+      <div className={`${styles.buttonRow} ${styles.panelToolbar}`}>
+        <PublishButton label="Publish contact" />
+      </div>
       <h2 className={styles.panelTitle}>Contact</h2>
       <p className={styles.panelDescription}>
         Share direct ways to reach you. Icons are inferred automatically from each link or identifier.
       </p>
-      <div className={styles.buttonRow}>
-        <PublishButton label="Publish contact" />
-      </div>
 
       <div className={styles.fieldGrid}>
         <div className={styles.fieldGroup}>

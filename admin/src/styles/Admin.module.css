@@ -290,6 +290,11 @@
   flex-wrap: wrap;
 }
 
+.panelToolbar {
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
 .primaryButton,
 .secondaryButton,
 .dangerButton {

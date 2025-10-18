@@ -18,10 +18,10 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
 
   return (
     <div className={styles.panelCard}>
-      <h2 className={styles.panelTitle}>About</h2>
-      <div className={styles.buttonRow}>
+      <div className={`${styles.buttonRow} ${styles.panelToolbar}`}>
         <PublishButton label="Publish about" />
       </div>
+      <h2 className={styles.panelTitle}>About</h2>
       <div className={styles.fieldGrid}>
         <div className={styles.fieldGroup}>
           <label htmlFor="about-eyebrow">Eyebrow</label>
