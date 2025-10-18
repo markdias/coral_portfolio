@@ -22,7 +22,20 @@ const intrinsicMotionMap = {
   ul: motion.ul
 };
 
-const Reveal = forwardRef(({ as = 'div', delay = 0, children, className = '', variants, ...props }, ref) => {
+const Reveal = forwardRef(
+  (
+    {
+      as = 'div',
+      delay = 0,
+      children,
+      className = '',
+      variants,
+      initial,
+      animate,
+      ...props
+    },
+    ref
+  ) => {
   const shouldReduceMotion = useReducedMotion();
   const MotionComponent = useMemo(() => {
     if (typeof as === 'string') {
@@ -45,9 +58,8 @@ const Reveal = forwardRef(({ as = 'div', delay = 0, children, className = '', va
     <MotionComponent
       ref={ref}
       className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      initial={initial ?? 'hidden'}
+      animate={animate ?? 'visible'}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay }}
       variants={
         variants ?? {
@@ -60,7 +72,8 @@ const Reveal = forwardRef(({ as = 'div', delay = 0, children, className = '', va
       {children}
     </MotionComponent>
   );
-});
+  }
+);
 
 Reveal.displayName = 'Reveal';
 
@@ -73,7 +86,9 @@ Reveal.propTypes = {
   delay: PropTypes.number,
   children: PropTypes.node,
   className: PropTypes.string,
-  variants: PropTypes.object
+  variants: PropTypes.object,
+  initial: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  animate: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 };
 
 export default Reveal;

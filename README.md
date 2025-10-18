@@ -8,7 +8,7 @@ in a separate, local-only app.
 
 The React application lives in [`frontend/`](frontend/) and includes:
 
-- Landing layout with scroll-snapped Home, About, and Portfolio sections that now render in full immediately so short viewports can access every panel while inner content still animates in on scroll.
+- Landing layout with scroll-snapped Home, About, and Portfolio sections that render fully as soon as the page loads so mobile visitors never miss content while inner elements still animate gracefully.
 - High-polish art direction with animated section reveals powered by [`framer-motion`](https://www.framer.com/motion/).
 - Refined warm-neutral palette with glassy surfaces and soft clay and ochre accents for a professional presentation.
 - Contact section with automatically detected icons for email, phone, and social links.
