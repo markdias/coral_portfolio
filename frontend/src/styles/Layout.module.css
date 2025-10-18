@@ -7,9 +7,9 @@
   padding-top: calc(env(safe-area-inset-top, 0px) + var(--header-padding-y));
   z-index: 40;
   backdrop-filter: blur(24px);
-  background: rgba(248, 250, 255, 0.86);
-  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.08);
+  background: rgba(253, 249, 244, 0.9);
+  border-bottom: 1px solid rgba(118, 94, 80, 0.16);
+  box-shadow: 0 24px 56px rgba(54, 41, 35, 0.1);
 }
 
 .headerInner {
@@ -38,8 +38,8 @@
   width: 48px;
   height: 48px;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(99, 102, 241, 0.85));
-  box-shadow: 0 20px 34px rgba(37, 99, 235, 0.18);
+  background: linear-gradient(135deg, rgba(179, 106, 76, 0.92), rgba(214, 164, 100, 0.85));
+  box-shadow: 0 20px 34px rgba(179, 106, 76, 0.24);
   display: grid;
   place-items: center;
 }
@@ -65,7 +65,7 @@
   font-size: 0.82rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(15, 23, 42, 0.52);
+  color: rgba(54, 41, 35, 0.58);
   padding: 0.35rem 0.6rem;
   transition: color 200ms ease;
 }
@@ -77,7 +77,7 @@
   bottom: -0.3rem;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0), rgba(37, 99, 235, 0.65), rgba(37, 99, 235, 0));
+  background: linear-gradient(90deg, rgba(179, 106, 76, 0), rgba(179, 106, 76, 0.65), rgba(179, 106, 76, 0));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 220ms ease;
@@ -92,8 +92,8 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: rgba(37, 99, 235, 0.12);
-  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.16);
+  background: rgba(179, 106, 76, 0.14);
+  box-shadow: 0 18px 34px rgba(179, 106, 76, 0.22);
   z-index: 0;
 }
 
@@ -117,8 +117,8 @@
 
 .mobileMenuButton {
   display: none;
-  border: 1px solid rgba(37, 99, 235, 0.35);
-  background: rgba(248, 250, 255, 0.9);
+  border: 1px solid rgba(179, 106, 76, 0.32);
+  background: rgba(253, 249, 244, 0.92);
   color: var(--ink-primary);
   border-radius: 999px;
   padding: 0.5rem 0.9rem;
@@ -129,17 +129,17 @@
 
 .mobileMenuButton:hover,
 .mobileMenuButton:focus-visible {
-  background: rgba(37, 99, 235, 0.14);
-  border-color: rgba(37, 99, 235, 0.45);
+  background: rgba(179, 106, 76, 0.16);
+  border-color: rgba(179, 106, 76, 0.4);
   transform: translateY(-1px);
 }
 
 .footer {
   margin-top: auto;
   padding: clamp(3.2rem, 6vw, 4.8rem) clamp(1.6rem, 6vw, 4.4rem);
-  color: rgba(15, 23, 42, 0.75);
-  border-top: 1px solid rgba(148, 163, 184, 0.2);
-  background: rgba(248, 250, 255, 0.88);
+  color: rgba(54, 41, 35, 0.78);
+  border-top: 1px solid rgba(118, 94, 80, 0.2);
+  background: rgba(253, 249, 244, 0.9);
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
@@ -154,7 +154,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(20, 184, 166, 0.1));
+  background: linear-gradient(135deg, rgba(179, 106, 76, 0.12), rgba(214, 164, 100, 0.14));
   z-index: -1;
 }
 
@@ -169,7 +169,7 @@
 }
 
 .footerLinks a {
-  color: rgba(15, 23, 42, 0.52);
+  color: rgba(54, 41, 35, 0.56);
   transition: color 160ms ease;
 }
 
@@ -190,11 +190,11 @@
     position: absolute;
     top: calc(100% + 1rem);
     right: clamp(1.4rem, 6vw, 3.6rem);
-    background: rgba(248, 250, 255, 0.95);
+    background: rgba(253, 249, 244, 0.95);
     padding: 1.35rem 1.6rem;
     border-radius: 22px;
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.14);
+    border: 1px solid rgba(118, 94, 80, 0.2);
+    box-shadow: 0 24px 48px rgba(54, 41, 35, 0.16);
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;

@@ -5,18 +5,18 @@
   line-height: 1.7;
   font-weight: 400;
   color-scheme: light;
-  --ink-primary: #0f172a;
-  --ink-secondary: #1f2937cc;
-  --ink-tertiary: #64748b;
-  --surface-glass: rgba(255, 255, 255, 0.92);
-  --surface-muted: rgba(255, 255, 255, 0.7);
-  --surface-border: rgba(15, 23, 42, 0.08);
-  --accent-primary: #2563eb;
-  --accent-secondary: #6366f1;
-  --accent-tertiary: #14b8a6;
-  --accent-ink: #0b1220;
-  --shadow-soft: 0 28px 80px rgba(15, 23, 42, 0.12);
-  --shadow-hard: 0 40px 120px rgba(15, 23, 42, 0.18);
+  --ink-primary: #2f241f;
+  --ink-secondary: rgba(59, 45, 39, 0.82);
+  --ink-tertiary: #7d6b62;
+  --surface-glass: rgba(255, 250, 244, 0.92);
+  --surface-muted: rgba(255, 250, 244, 0.76);
+  --surface-border: rgba(89, 64, 51, 0.1);
+  --accent-primary: #b36a4c;
+  --accent-secondary: #d6a464;
+  --accent-tertiary: #5a8f82;
+  --accent-ink: #2a1b16;
+  --shadow-soft: 0 28px 80px rgba(54, 41, 35, 0.12);
+  --shadow-hard: 0 40px 120px rgba(54, 41, 35, 0.18);
   --header-padding-y: clamp(1rem, 2.6vw, 1.8rem);
   --header-height: calc((var(--header-padding-y) * 2) + 48px + env(safe-area-inset-top, 0px));
   color: var(--ink-primary);
@@ -35,9 +35,9 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.08), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.12), transparent 65%),
-    linear-gradient(140deg, #f5f7fb 0%, #eef2f8 45%, #f8fafc 100%);
+  background: radial-gradient(circle at 18% 22%, rgba(179, 106, 76, 0.12), transparent 58%),
+    radial-gradient(circle at 88% 72%, rgba(90, 143, 130, 0.14), transparent 62%),
+    linear-gradient(140deg, #f8f2ec 0%, #f4ede6 42%, #fbf7f1 100%);
   background-attachment: fixed;
   color: var(--ink-primary);
   position: relative;
@@ -47,12 +47,12 @@ body {
 body::before {
   content: '';
   position: fixed;
-  inset: -20% -30% -30% -20%;
+  inset: -18% -24% -26% -18%;
   z-index: -1;
   background:
-    radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.14), transparent 55%),
-    radial-gradient(circle at 80% 70%, rgba(14, 116, 144, 0.16), transparent 60%);
-  filter: blur(110px);
+    radial-gradient(circle at 28% 28%, rgba(179, 106, 76, 0.15), transparent 55%),
+    radial-gradient(circle at 76% 68%, rgba(214, 164, 100, 0.18), transparent 58%);
+  filter: blur(120px);
   opacity: 0.55;
   pointer-events: none;
 }
@@ -98,8 +98,8 @@ button {
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.25);
-  color: #f8fafc;
+  background: rgba(179, 106, 76, 0.25);
+  color: #fdfaf5;
 }
 
 @media (prefers-reduced-motion: reduce) {
