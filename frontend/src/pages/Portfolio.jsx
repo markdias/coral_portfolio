@@ -4,13 +4,16 @@ import ProjectCard from '../components/ProjectCard.jsx';
 import styles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
 import Reveal from '../components/Reveal.jsx';
-import { getFontFamily } from '../utils/typography.js';
+import { resolveFontFamily } from '../utils/typography.js';
 
 const Portfolio = () => {
   const { data } = useData();
   const shouldReduceMotion = useReducedMotion();
   const [activeFilter, setActiveFilter] = useState('all');
-  const portfolioFont = getFontFamily(data.typography?.portfolio);
+  const typography = data.typography || {};
+  const titleFont = resolveFontFamily(typography, 'portfolio.introTitle');
+  const descriptionFont = resolveFontFamily(typography, 'portfolio.introDescription', 'sans');
+  const filtersFont = resolveFontFamily(typography, 'portfolio.filtersLabel', 'sans');
 
   const filterOptions = useMemo(
     () => [{ id: 'all', name: 'All' }, ...data.collections],
@@ -28,15 +31,15 @@ const Portfolio = () => {
   return (
     <div className={styles.section}>
       <Reveal as="div" className={styles.intro}>
-        <Reveal as="h1" delay={0.05} style={{ fontFamily: portfolioFont }}>
+        <Reveal as="h1" delay={0.05} style={{ fontFamily: titleFont }}>
           {data.portfolio.introTitle}
         </Reveal>
-        <Reveal as="p" delay={0.12} style={{ fontFamily: portfolioFont }}>
+        <Reveal as="p" delay={0.12} style={{ fontFamily: descriptionFont }}>
           {data.portfolio.introDescription}
         </Reveal>
         <LayoutGroup>
           <div className={styles.filters}>
-            <Reveal as="span" className={styles.filtersLabel} delay={0.16} style={{ fontFamily: portfolioFont }}>
+            <Reveal as="span" className={styles.filtersLabel} delay={0.16} style={{ fontFamily: filtersFont }}>
               {data.portfolio.filtersLabel}
             </Reveal>
             <div className={styles.filtersChips}>
@@ -49,7 +52,7 @@ const Portfolio = () => {
                     type="button"
                     className={`${styles.filterButton} ${isActive ? styles.filterActive : ''}`.trim()}
                     onClick={() => setActiveFilter(option.id)}
-                    style={{ fontFamily: portfolioFont }}
+                    style={{ fontFamily: filtersFont }}
                     whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
                     transition={{ type: 'spring', stiffness: 320, damping: 28 }}
                   >
@@ -68,7 +71,7 @@ const Portfolio = () => {
           </div>
         </LayoutGroup>
         {activeCollection ? (
-          <Reveal as="div" className={styles.collectionSummary} delay={0.24} style={{ fontFamily: portfolioFont }}>
+          <Reveal as="div" className={styles.collectionSummary} delay={0.24} style={{ fontFamily: descriptionFont }}>
             <p>{activeCollection.description}</p>
             {activeCollection.mood ? <span>{activeCollection.mood}</span> : null}
           </Reveal>

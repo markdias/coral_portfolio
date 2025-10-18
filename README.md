@@ -14,7 +14,7 @@ The React application lives in [`frontend/`](frontend/) and includes:
 - Contact section with automatically detected icons for email, phone, and social links.
 - Dynamic project cards, project detail pages with modal galleries, and responsive masonry layouts.
 - A lightweight data layer backed by `localStorage`, seeded with couture-inspired sample content.
-- About section impact stats now support descriptive copy beneath each label and inherit fonts from the global typography manager.
+- About section impact stats now support descriptive copy beneath each label with per-field font control via the admin typography manager.
 
 ### Running locally
 
@@ -60,7 +60,8 @@ current dataset to `frontend/src/data/defaultData.js`.
 
 The admin studio now includes a contact editor. You can add email, phone numbers, or any URL and the frontend will infer a
 matching icon automatically when visitors browse the contact section. A font manager at the top of the dashboard lets you
-pick from curated typefaces and apply them to the Home, About, Portfolio, and Contact sections in one pass.
+pick from curated typefaces and apply them to individual text fields across the Home, About, Portfolio, and Contact
+sections in one pass.
 
 ### Image protection tools
 

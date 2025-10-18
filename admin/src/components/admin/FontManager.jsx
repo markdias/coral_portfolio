@@ -1,31 +1,47 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/Admin.module.css';
-import { FONT_OPTIONS, getFontLabel, getFontOptionByValue } from '../../utils/typography.js';
+import {
+  FONT_OPTIONS,
+  buildFontTargets,
+  getFontLabel,
+  getFontOptionByValue
+} from '../../utils/typography.js';
 
-const SECTION_OPTIONS = [
-  { key: 'home', label: 'Home' },
-  { key: 'about', label: 'About' },
-  { key: 'portfolio', label: 'Portfolio' },
-  { key: 'contact', label: 'Contact' }
-];
+const flattenTargets = (targets) =>
+  targets.flatMap((section) => section.fields.map((field) => field.key));
 
-const FontManager = ({ typography, onApply }) => {
+const FontManager = ({ data, typography, onApply }) => {
   const [selectedFont, setSelectedFont] = useState(FONT_OPTIONS[0].value);
-  const [selectedSections, setSelectedSections] = useState(() => new Set());
+  const [selectedKeys, setSelectedKeys] = useState(() => new Set());
+
+  const targets = useMemo(() => buildFontTargets(data), [data]);
+  const selectableKeys = useMemo(() => new Set(flattenTargets(targets)), [targets]);
+
+  useEffect(() => {
+    setSelectedKeys((prev) => {
+      const next = new Set();
+      prev.forEach((key) => {
+        if (selectableKeys.has(key)) {
+          next.add(key);
+        }
+      });
+      return next;
+    });
+  }, [selectableKeys]);
 
   const selectedFontOption = useMemo(
     () => getFontOptionByValue(selectedFont) ?? FONT_OPTIONS[0],
     [selectedFont]
   );
 
-  const toggleSection = (sectionKey) => {
-    setSelectedSections((prev) => {
+  const toggleKey = (key) => {
+    setSelectedKeys((prev) => {
       const next = new Set(prev);
-      if (next.has(sectionKey)) {
-        next.delete(sectionKey);
+      if (next.has(key)) {
+        next.delete(key);
       } else {
-        next.add(sectionKey);
+        next.add(key);
       }
       return next;
     });
@@ -33,14 +49,20 @@ const FontManager = ({ typography, onApply }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!selectedSections.size) return;
+    if (!selectedKeys.size) return;
+
     const updates = {};
-    selectedSections.forEach((section) => {
-      updates[section] = selectedFont;
+    selectedKeys.forEach((key) => {
+      updates[key] = selectedFont;
     });
+
     onApply(updates);
-    setSelectedSections(new Set());
+    setSelectedKeys(new Set());
   };
+
+  if (!targets.length) {
+    return null;
+  }
 
   return (
     <div className={styles.panelCard} aria-live="polite">
@@ -66,31 +88,40 @@ const FontManager = ({ typography, onApply }) => {
               The quick coral print
             </span>
           </div>
-        </div>
-        <fieldset className={styles.fontSections}>
-          <legend>Apply font to sections</legend>
-          {SECTION_OPTIONS.map((section) => {
-            const isChecked = selectedSections.has(section.key);
-            const currentFontLabel = getFontLabel(typography?.[section.key]);
-            return (
-              <label key={section.key} className={styles.fontSectionOption}>
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => toggleSection(section.key)}
-                />
-                <span className={styles.fontSectionCopy}>
-                  <span className={styles.fontSectionName}>{section.label}</span>
-                  <span className={styles.fontSectionCurrent}>Current: {currentFontLabel}</span>
-                </span>
-              </label>
-            );
-          })}
-        </fieldset>
-        <div className={styles.buttonRow}>
-          <button type="submit" className={styles.primaryButton} disabled={!selectedSections.size}>
+          <button type="submit" className={styles.primaryButton} disabled={!selectedKeys.size}>
             Save font selection
           </button>
+        </div>
+
+        <div className={styles.fontSectionsGrid}>
+          {targets.map((section) => (
+            <fieldset key={section.key} className={styles.fontSectionGroup}>
+              <legend>{section.label}</legend>
+              <ul className={styles.fontFieldList}>
+                {section.fields.map((field) => {
+                  const isChecked = selectedKeys.has(field.key);
+                  const currentFontLabel = getFontLabel(typography?.[field.key]);
+
+                  return (
+                    <li key={field.key}>
+                      <label className={styles.fontFieldOption}>
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleKey(field.key)}
+                        />
+                        <span className={styles.fontFieldCopy}>
+                          <span className={styles.fontFieldLabel}>{field.label}</span>
+                          {field.hint ? <span className={styles.fontFieldHint}>{field.hint}</span> : null}
+                          <span className={styles.fontFieldCurrent}>Current: {currentFontLabel}</span>
+                        </span>
+                      </label>
+                    </li>
+                  );
+                })}
+              </ul>
+            </fieldset>
+          ))}
         </div>
       </form>
     </div>
@@ -98,6 +129,7 @@ const FontManager = ({ typography, onApply }) => {
 };
 
 FontManager.propTypes = {
+  data: PropTypes.object.isRequired,
   typography: PropTypes.object,
   onApply: PropTypes.func.isRequired
 };
@@ -107,4 +139,3 @@ FontManager.defaultProps = {
 };
 
 export default FontManager;
-

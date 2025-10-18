@@ -117,7 +117,7 @@ const AdminPanel = () => {
         </div>
       </header>
 
-      <FontManager typography={data.typography} onApply={updateTypography} />
+      <FontManager data={data} typography={data.typography} onApply={updateTypography} />
 
       <HomeEditor home={data.home} onSave={updateHome} />
 

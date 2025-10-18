@@ -129,7 +129,7 @@ const AdminPanel = () => {
           </button>
         </div>
       </header>
-      <FontManager typography={data.typography} onApply={updateTypography} />
+      <FontManager data={data} typography={data.typography} onApply={updateTypography} />
       <nav className={styles.sectionsNav} aria-label="Sections">
         <a href="#site-settings">Site</a>
         <a href="#home">Home</a>

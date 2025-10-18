@@ -142,6 +142,20 @@
   font-size: 0.75rem;
 }
 
+.calloutList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.calloutList li {
+  color: var(--ink-secondary);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
 .statBlock {
   display: grid;
   gap: 0.45rem;
