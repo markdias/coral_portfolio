@@ -29,7 +29,7 @@
   background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
   transform-origin: 0% 50%;
   transform: scaleX(0);
-  box-shadow: 0 10px 30px rgba(111, 107, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
   pointer-events: none;
   z-index: 12;
 }
@@ -37,8 +37,8 @@
 .scrollAura {
   position: fixed;
   inset: -30% -10% -10% -10%;
-  background: radial-gradient(circle at 30% 20%, rgba(111, 107, 255, 0.14), transparent 55%),
-    radial-gradient(circle at 78% 72%, rgba(255, 114, 177, 0.16), transparent 55%);
+  background: radial-gradient(circle at 30% 20%, rgba(37, 99, 235, 0.14), transparent 55%),
+    radial-gradient(circle at 78% 72%, rgba(14, 116, 144, 0.14), transparent 55%);
   filter: blur(40px);
   z-index: -2;
   pointer-events: none;
@@ -62,10 +62,10 @@
   position: absolute;
   inset: clamp(1.2rem, 4vw, 3.4rem);
   border-radius: clamp(1.8rem, 4.8vw, 3.6rem);
-  background: var(--surface-glass);
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(28px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(241, 245, 249, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(24px);
   z-index: 0;
 }
 
@@ -86,23 +86,23 @@
 }
 
 .homeTone::after {
-  background: radial-gradient(circle at 12% 18%, rgba(111, 107, 255, 0.32), transparent 60%),
-    radial-gradient(circle at 78% 82%, rgba(255, 114, 177, 0.28), transparent 65%);
+  background: radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.2), transparent 60%),
+    radial-gradient(circle at 78% 82%, rgba(99, 102, 241, 0.18), transparent 65%);
 }
 
 .aboutTone::after {
-  background: radial-gradient(circle at 18% 72%, rgba(77, 208, 200, 0.24), transparent 55%),
-    radial-gradient(circle at 85% 28%, rgba(111, 107, 255, 0.22), transparent 60%);
+  background: radial-gradient(circle at 18% 72%, rgba(20, 184, 166, 0.24), transparent 55%),
+    radial-gradient(circle at 85% 28%, rgba(37, 99, 235, 0.18), transparent 60%);
 }
 
 .portfolioTone::after {
-  background: radial-gradient(circle at 18% 18%, rgba(255, 114, 177, 0.26), transparent 60%),
-    radial-gradient(circle at 82% 80%, rgba(111, 107, 255, 0.3), transparent 58%);
+  background: radial-gradient(circle at 18% 18%, rgba(37, 99, 235, 0.24), transparent 60%),
+    radial-gradient(circle at 82% 80%, rgba(99, 102, 241, 0.26), transparent 58%);
 }
 
 .contactTone::after {
-  background: radial-gradient(circle at 24% 30%, rgba(77, 208, 200, 0.3), transparent 58%),
-    radial-gradient(circle at 74% 72%, rgba(255, 114, 177, 0.22), transparent 62%);
+  background: radial-gradient(circle at 24% 30%, rgba(20, 184, 166, 0.28), transparent 58%),
+    radial-gradient(circle at 74% 72%, rgba(99, 102, 241, 0.2), transparent 62%);
 }
 
 @media (max-width: 768px) {
