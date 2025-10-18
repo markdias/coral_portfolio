@@ -48,6 +48,10 @@
   color: #1b1c26;
 }
 
+.fontToolbarHeader .panelTitle {
+  margin: 0;
+}
+
 .panelDescription {
   color: #4a4b58;
   font-size: 0.95rem;
@@ -201,6 +205,28 @@
 .fontToolbar {
   display: grid;
   gap: 1.5rem;
+}
+
+.fontToolbarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.fontToolbarIntro {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 220px;
+}
+
+.fontToolbarHint {
+  margin: 0;
+  color: #4a4b58;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .fontToolbarRow {

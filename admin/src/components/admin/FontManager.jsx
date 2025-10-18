@@ -12,6 +12,7 @@ const flattenTargets = (targets) =>
   targets.flatMap((section) => section.fields.map((field) => field.key));
 
 const FontManager = ({ data, typography, onApply }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [selectedFont, setSelectedFont] = useState(FONT_OPTIONS[0].value);
   const [selectedKeys, setSelectedKeys] = useState(() => new Set());
 
@@ -64,14 +65,35 @@ const FontManager = ({ data, typography, onApply }) => {
     return null;
   }
 
+  const toggleExpanded = () => setIsExpanded((prev) => !prev);
+
   return (
     <div className={styles.panelCard} aria-live="polite">
-      <form className={styles.fontToolbar} onSubmit={handleSubmit}>
-        <div className={styles.fontToolbarRow}>
-          <div className={styles.fieldGroup} style={{ flex: 1 }}>
-            <label htmlFor="font-toolbar-select">Font selector</label>
-            <select
-              id="font-toolbar-select"
+      <div className={styles.fontToolbarHeader}>
+        <div className={styles.fontToolbarIntro}>
+          <h2 className={styles.panelTitle}>Typography manager</h2>
+          <p className={styles.fontToolbarHint}>
+            Select a font and apply it to individual text inputs across each section.
+          </p>
+        </div>
+        <button
+          type="button"
+          className={styles.secondaryButton}
+          onClick={toggleExpanded}
+          aria-expanded={isExpanded}
+          aria-controls="font-toolbar-panel"
+        >
+          {isExpanded ? 'Hide font tools' : 'Show font tools'}
+        </button>
+      </div>
+
+      {isExpanded ? (
+        <form id="font-toolbar-panel" className={styles.fontToolbar} onSubmit={handleSubmit}>
+          <div className={styles.fontToolbarRow}>
+            <div className={styles.fieldGroup} style={{ flex: 1 }}>
+              <label htmlFor="font-toolbar-select">Font selector</label>
+              <select
+                id="font-toolbar-select"
               value={selectedFont}
               onChange={(event) => setSelectedFont(event.target.value)}
             >
@@ -124,6 +146,7 @@ const FontManager = ({ data, typography, onApply }) => {
           ))}
         </div>
       </form>
+      ) : null}
     </div>
   );
 };
