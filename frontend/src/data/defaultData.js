@@ -70,17 +70,29 @@ export const defaultData = {
       {
         "id": "stat-5b47c8c0-b021-4e62-b474-ec0f64dfffba",
         "value": "Next",
-        "label": "2025"
+        "label": "2025",
+        "description": "Designing resort-ready florals for the Next SS capsule",
+        "valueFont": "display",
+        "labelFont": "sans",
+        "descriptionFont": "sans"
       },
       {
         "id": "stat-cc89f35d-89d3-4f17-9edc-4a0d39ce7358",
         "value": "Tesco",
-        "label": "2024"
+        "label": "2024",
+        "description": "Illustrated limited-run grocery collectibles inspired by reefs",
+        "valueFont": "display",
+        "labelFont": "sans",
+        "descriptionFont": "sans"
       },
       {
         "id": "stat-0db9f37c-60ee-4fe0-8d7a-aec2b2d73c39",
         "value": "Arcadia",
-        "label": "2019"
+        "label": "2019",
+        "description": "Curated botanical jacquards for Arcadia Atelier runway finale",
+        "valueFont": "display",
+        "labelFont": "sans",
+        "descriptionFont": "sans"
       }
     ]
   },
