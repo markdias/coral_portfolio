@@ -62,6 +62,8 @@ The admin studio now includes a contact editor. You can add email, phone numbers
 matching icon automatically when visitors browse the contact section. The dashboard adopts a WordPress-style layout with a
 persistent sidebar—pick any section in the left rail to load its tools into the main workspace on the right. Each editor now
 surfaces its publish action in a compact toolbar above the section header, so you can quickly push updates without scrolling.
+A rose gold accent palette now highlights buttons, focus rings, and selection states so the studio retains its polish while
+matching the updated brand direction.
 A collapsible typography manager now lives in its own navigation section so you can apply curated typefaces to individual text fields across
 the Home, About, Portfolio, and Contact sections in one pass.
 

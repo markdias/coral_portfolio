@@ -261,8 +261,8 @@
 .inlineFields textarea:focus,
 .inlineFields select:focus {
   outline: none;
-  border-color: #111dff;
-  box-shadow: 0 0 0 3px rgba(17, 29, 255, 0.15);
+  border-color: #b76e79;
+  box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.2);
 }
 
 /* Uniform control heights; textareas can grow but start at input height */
@@ -308,14 +308,14 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #1f3fff, #5a65ff);
+  background: linear-gradient(135deg, #b76e79, #f3c6b8);
   color: #ffffff;
-  box-shadow: 0 15px 35px rgba(31, 63, 255, 0.25);
+  box-shadow: 0 15px 35px rgba(183, 110, 121, 0.25);
 }
 
 .secondaryButton {
-  background: rgba(31, 63, 255, 0.08);
-  color: #1f2c64;
+  background: rgba(183, 110, 121, 0.12);
+  color: #7a3d44;
 }
 
 .dangerButton {
@@ -447,8 +447,8 @@
 
 .fontFieldOption:hover,
 .fontFieldOption:focus-within {
-  border-color: rgba(31, 63, 255, 0.35);
-  background: rgba(31, 63, 255, 0.08);
+  border-color: rgba(183, 110, 121, 0.45);
+  background: rgba(183, 110, 121, 0.12);
 }
 
 .fontFieldCopy {
