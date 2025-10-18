@@ -2,6 +2,35 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/Admin.module.css';
 
+const FONT_OPTIONS = [
+  {
+    label: 'Playfair Display',
+    value: 'display'
+  },
+  {
+    label: 'Plus Jakarta Sans',
+    value: 'sans'
+  },
+  {
+    label: 'Georgia',
+    value: 'serif'
+  }
+];
+
+const STAT_DEFAULTS = {
+  value: '',
+  label: '',
+  description: '',
+  valueFont: 'display',
+  labelFont: 'sans',
+  descriptionFont: 'sans'
+};
+
+const withDefaults = (stat) => ({
+  ...STAT_DEFAULTS,
+  ...stat
+});
+
 const splitLines = (value) =>
   value
     .split('\n')
@@ -20,17 +49,15 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
     setTitle(about.title ?? '');
     setParagraphsText((about.paragraphs ?? []).join('\n\n'));
     setCapabilitiesText((about.capabilities ?? []).join('\n'));
-    setStats(about.stats ?? []);
+    setStats((about.stats ?? []).map(withDefaults));
   }, [about]);
 
   const handleAddStat = () => {
     setStats((prev) => [
       ...prev,
-      {
-        id: onCreateId('stat'),
-        value: '',
-        label: ''
-      }
+      withDefaults({
+        id: onCreateId('stat')
+      })
     ]);
   };
 
@@ -57,7 +84,11 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
       .map((item) => ({
         ...item,
         value: (item.value ?? '').trim(),
-        label: (item.label ?? '').trim()
+        label: (item.label ?? '').trim(),
+        description: (item.description ?? '').trim(),
+        valueFont: item.valueFont || STAT_DEFAULTS.valueFont,
+        labelFont: item.labelFont || STAT_DEFAULTS.labelFont,
+        descriptionFont: item.descriptionFont || STAT_DEFAULTS.descriptionFont
       }))
       .filter((item) => item.value && item.label);
 
@@ -140,12 +171,61 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
                     />
                   </div>
                   <div className={styles.fieldGroup}>
-                    <label>Description</label>
+                    <label>Label</label>
                     <input
                       value={stat.label}
                       onChange={(event) => handleStatChange(stat.id, 'label', event.target.value)}
                       placeholder="Runway capsules outfitted"
                     />
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label>Supporting description</label>
+                    <input
+                      value={stat.description}
+                      onChange={(event) => handleStatChange(stat.id, 'description', event.target.value)}
+                      placeholder="Seasonal runway collaborations"
+                    />
+                  </div>
+                </div>
+                <div className={styles.metadataRowFields}>
+                  <div className={styles.fieldGroup}>
+                    <label>Value font</label>
+                    <select
+                      value={stat.valueFont}
+                      onChange={(event) => handleStatChange(stat.id, 'valueFont', event.target.value)}
+                    >
+                      {FONT_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label>Label font</label>
+                    <select
+                      value={stat.labelFont}
+                      onChange={(event) => handleStatChange(stat.id, 'labelFont', event.target.value)}
+                    >
+                      {FONT_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label>Description font</label>
+                    <select
+                      value={stat.descriptionFont}
+                      onChange={(event) => handleStatChange(stat.id, 'descriptionFont', event.target.value)}
+                    >
+                      {FONT_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className={styles.metadataRowActions}>
@@ -182,7 +262,11 @@ AboutEditor.propTypes = {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         value: PropTypes.string,
-        label: PropTypes.string
+        label: PropTypes.string,
+        description: PropTypes.string,
+        valueFont: PropTypes.string,
+        labelFont: PropTypes.string,
+        descriptionFont: PropTypes.string
       })
     )
   }).isRequired,

@@ -87,10 +87,42 @@ export const defaultData = {
       'Custom illustration for resort, bridal, and ready-to-wear'
     ],
     stats: [
-      { id: createId('stat'), value: '28', label: 'Runway capsules outfitted' },
-      { id: createId('stat'), value: '16', label: 'Editorial covers featuring her prints' },
-      { id: createId('stat'), value: '42', label: 'Botanical species catalogued for palettes' },
-      { id: createId('stat'), value: '12', label: 'Residencies at coastal design labs' }
+      {
+        id: createId('stat'),
+        value: '28',
+        label: 'Runway capsules outfitted',
+        description: 'Signature looks sent down international runways in the last 5 years',
+        valueFont: 'display',
+        labelFont: 'sans',
+        descriptionFont: 'sans'
+      },
+      {
+        id: createId('stat'),
+        value: '16',
+        label: 'Editorial covers featuring her prints',
+        description: 'Global glossies and indie zines spotlighting bespoke textile stories',
+        valueFont: 'display',
+        labelFont: 'sans',
+        descriptionFont: 'sans'
+      },
+      {
+        id: createId('stat'),
+        value: '42',
+        label: 'Botanical species catalogued for palettes',
+        description: 'Sea flora studies archived to inform limited-edition pigment labs',
+        valueFont: 'display',
+        labelFont: 'sans',
+        descriptionFont: 'sans'
+      },
+      {
+        id: createId('stat'),
+        value: '12',
+        label: 'Residencies at coastal design labs',
+        description: 'Immersive collaborations with regenerative material innovators',
+        valueFont: 'display',
+        labelFont: 'sans',
+        descriptionFont: 'sans'
+      }
     ]
   },
   portfolio: {

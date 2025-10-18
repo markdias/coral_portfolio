@@ -2,6 +2,14 @@ import pageStyles from '../styles/PageSections.module.css';
 import { useData } from '../store/DataContext.jsx';
 import Reveal from '../components/Reveal.jsx';
 
+const FONT_FAMILIES = {
+  display: "'Playfair Display', 'Times New Roman', serif",
+  sans: "'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  serif: "'Georgia', 'Times New Roman', serif"
+};
+
+const getFontFamily = (fontKey, fallbackKey) => FONT_FAMILIES[fontKey] ?? FONT_FAMILIES[fallbackKey] ?? FONT_FAMILIES.display;
+
 const About = () => {
   const { data } = useData();
   const { about } = data;
@@ -32,12 +40,39 @@ const About = () => {
         ) : null}
       </Reveal>
       <div className={pageStyles.gridTwoColumn}>
-        {about.stats?.map((stat, index) => (
-          <Reveal as="div" key={stat.id} className={pageStyles.statBlock} delay={0.18 + index * 0.08}>
-            <p className={pageStyles.statValue}>{stat.value}</p>
-            <p className={pageStyles.statLabel}>{stat.label}</p>
-          </Reveal>
-        ))}
+        {about.stats?.map((stat, index) => {
+          const statWithDefaults = {
+            valueFont: 'display',
+            labelFont: 'sans',
+            descriptionFont: 'sans',
+            ...stat
+          };
+
+          return (
+            <Reveal as="div" key={stat.id} className={pageStyles.statBlock} delay={0.18 + index * 0.08}>
+              <p
+                className={pageStyles.statValue}
+                style={{ fontFamily: getFontFamily(statWithDefaults.valueFont, 'display') }}
+              >
+                {statWithDefaults.value}
+              </p>
+              <p
+                className={pageStyles.statLabel}
+                style={{ fontFamily: getFontFamily(statWithDefaults.labelFont, 'sans') }}
+              >
+                {statWithDefaults.label}
+              </p>
+              {statWithDefaults.description ? (
+                <p
+                  className={pageStyles.statDescription}
+                  style={{ fontFamily: getFontFamily(statWithDefaults.descriptionFont, 'sans') }}
+                >
+                  {statWithDefaults.description}
+                </p>
+              ) : null}
+            </Reveal>
+          );
+        })}
       </div>
     </div>
   );
