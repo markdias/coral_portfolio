@@ -8,6 +8,7 @@ import ContactEditor from './ContactEditor.jsx';
 import CollectionsManager from './CollectionsManager.jsx';
 import ProjectsManager from './ProjectsManager.jsx';
 import SiteSettings from './SiteSettings.jsx';
+import FontManager from './FontManager.jsx';
 
 const AdminPanel = () => {
   const {
@@ -17,6 +18,7 @@ const AdminPanel = () => {
     updatePortfolio,
     updateContact,
     updateSettings,
+    updateTypography,
     addCollection,
     updateCollection,
     removeCollection,
@@ -127,6 +129,7 @@ const AdminPanel = () => {
           </button>
         </div>
       </header>
+      <FontManager data={data} typography={data.typography} onApply={updateTypography} />
       <nav className={styles.sectionsNav} aria-label="Sections">
         <a href="#site-settings">Site</a>
         <a href="#home">Home</a>

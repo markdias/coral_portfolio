@@ -2,6 +2,17 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/Admin.module.css';
 
+const STAT_DEFAULTS = {
+  value: '',
+  label: '',
+  description: ''
+};
+
+const withDefaults = (stat) => ({
+  ...STAT_DEFAULTS,
+  ...stat
+});
+
 const splitLines = (value) =>
   value
     .split('\n')
@@ -20,17 +31,15 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
     setTitle(about.title ?? '');
     setParagraphsText((about.paragraphs ?? []).join('\n\n'));
     setCapabilitiesText((about.capabilities ?? []).join('\n'));
-    setStats(about.stats ?? []);
+    setStats((about.stats ?? []).map(withDefaults));
   }, [about]);
 
   const handleAddStat = () => {
     setStats((prev) => [
       ...prev,
-      {
-        id: onCreateId('stat'),
-        value: '',
-        label: ''
-      }
+      withDefaults({
+        id: onCreateId('stat')
+      })
     ]);
   };
 
@@ -57,7 +66,8 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
       .map((item) => ({
         ...item,
         value: (item.value ?? '').trim(),
-        label: (item.label ?? '').trim()
+        label: (item.label ?? '').trim(),
+        description: (item.description ?? '').trim()
       }))
       .filter((item) => item.value && item.label);
 
@@ -140,11 +150,19 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
                     />
                   </div>
                   <div className={styles.fieldGroup}>
-                    <label>Description</label>
+                    <label>Label</label>
                     <input
                       value={stat.label}
                       onChange={(event) => handleStatChange(stat.id, 'label', event.target.value)}
                       placeholder="Runway capsules outfitted"
+                    />
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label>Supporting description</label>
+                    <input
+                      value={stat.description}
+                      onChange={(event) => handleStatChange(stat.id, 'description', event.target.value)}
+                      placeholder="Seasonal runway collaborations"
                     />
                   </div>
                 </div>
@@ -182,7 +200,8 @@ AboutEditor.propTypes = {
       PropTypes.shape({
         id: PropTypes.string.isRequired,
         value: PropTypes.string,
-        label: PropTypes.string
+        label: PropTypes.string,
+        description: PropTypes.string
       })
     )
   }).isRequired,

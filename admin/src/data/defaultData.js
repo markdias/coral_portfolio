@@ -8,6 +8,33 @@ const contactPhoneId = createId('contact');
 const contactLinkedInId = createId('contact');
 const contactInstagramId = createId('contact');
 
+const aboutStats = [
+  {
+    id: createId('stat'),
+    value: '28',
+    label: 'Runway capsules outfitted',
+    description: 'Signature looks sent down international runways in the last 5 years'
+  },
+  {
+    id: createId('stat'),
+    value: '16',
+    label: 'Editorial covers featuring her prints',
+    description: 'Global glossies and indie zines spotlighting bespoke textile stories'
+  },
+  {
+    id: createId('stat'),
+    value: '42',
+    label: 'Botanical species catalogued for palettes',
+    description: 'Sea flora studies archived to inform limited-edition pigment labs'
+  },
+  {
+    id: createId('stat'),
+    value: '12',
+    label: 'Residencies at coastal design labs',
+    description: 'Immersive collaborations with regenerative material innovators'
+  }
+];
+
 const buildMetadata = (entries) =>
   entries.map(({ label, value }) => ({ id: createId('meta'), label, value }));
 
@@ -15,6 +42,56 @@ const buildGallery = (images) =>
   images.map(({ src, alt }) => ({ id: createId('image'), src, alt }));
 
 export const defaultData = {
+  typography: {
+    'home.eyebrow': 'display',
+    'home.title': 'display',
+    'home.description': 'sans',
+    'home.ribbonText': 'sans',
+    'home.primaryCta.label': 'sans',
+    'home.secondaryCta.label': 'sans',
+    'about.eyebrow': 'display',
+    'about.title': 'display',
+    'about.paragraphs.0': 'serif',
+    'about.paragraphs.1': 'serif',
+    'about.capabilities.0': 'sans',
+    'about.capabilities.1': 'sans',
+    'about.capabilities.2': 'sans',
+    'about.capabilities.3': 'sans',
+    [`about.stats.${aboutStats[0].id}.value`]: 'display',
+    [`about.stats.${aboutStats[0].id}.label`]: 'sans',
+    [`about.stats.${aboutStats[0].id}.description`]: 'sans',
+    [`about.stats.${aboutStats[1].id}.value`]: 'display',
+    [`about.stats.${aboutStats[1].id}.label`]: 'sans',
+    [`about.stats.${aboutStats[1].id}.description`]: 'sans',
+    [`about.stats.${aboutStats[2].id}.value`]: 'display',
+    [`about.stats.${aboutStats[2].id}.label`]: 'sans',
+    [`about.stats.${aboutStats[2].id}.description`]: 'sans',
+    [`about.stats.${aboutStats[3].id}.value`]: 'display',
+    [`about.stats.${aboutStats[3].id}.label`]: 'sans',
+    [`about.stats.${aboutStats[3].id}.description`]: 'sans',
+    'portfolio.introTitle': 'display',
+    'portfolio.introDescription': 'sans',
+    'portfolio.filtersLabel': 'sans',
+    'contact.eyebrow': 'display',
+    'contact.title': 'display',
+    'contact.description': 'sans',
+    [`contact.entries.${contactEmailId}.label`]: 'sans',
+    [`contact.entries.${contactEmailId}.value`]: 'sans',
+    [`contact.entries.${contactEmailId}.displayValue`]: 'sans',
+    [`contact.entries.${contactEmailId}.note`]: 'sans',
+    [`contact.entries.${contactPhoneId}.label`]: 'sans',
+    [`contact.entries.${contactPhoneId}.value`]: 'sans',
+    [`contact.entries.${contactPhoneId}.displayValue`]: 'sans',
+    [`contact.entries.${contactPhoneId}.note`]: 'sans',
+    [`contact.entries.${contactLinkedInId}.label`]: 'sans',
+    [`contact.entries.${contactLinkedInId}.value`]: 'sans',
+    [`contact.entries.${contactLinkedInId}.displayValue`]: 'sans',
+    [`contact.entries.${contactLinkedInId}.note`]: 'sans',
+    [`contact.entries.${contactInstagramId}.label`]: 'sans',
+    [`contact.entries.${contactInstagramId}.value`]: 'sans',
+    [`contact.entries.${contactInstagramId}.displayValue`]: 'sans',
+    [`contact.entries.${contactInstagramId}.note`]: 'sans'
+  },
   settings: {
     adminPassword: '',
     siteTitle: 'Coral Dias',
@@ -86,12 +163,7 @@ export const defaultData = {
       'Lookbook art direction and motion treatments',
       'Custom illustration for resort, bridal, and ready-to-wear'
     ],
-    stats: [
-      { id: createId('stat'), value: '28', label: 'Runway capsules outfitted' },
-      { id: createId('stat'), value: '16', label: 'Editorial covers featuring her prints' },
-      { id: createId('stat'), value: '42', label: 'Botanical species catalogued for palettes' },
-      { id: createId('stat'), value: '12', label: 'Residencies at coastal design labs' }
-    ]
+    stats: aboutStats
   },
   portfolio: {
     introTitle: 'Portfolio',

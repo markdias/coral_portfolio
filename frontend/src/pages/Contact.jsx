@@ -9,27 +9,32 @@ import {
   shouldOpenInNewTab
 } from '../utils/contact.jsx';
 import Reveal from '../components/Reveal.jsx';
+import { resolveFontFamily } from '../utils/typography.js';
 
 const Contact = () => {
   const { data } = useData();
   const contact = data.contact || {};
   const entries = Array.isArray(contact.entries) ? contact.entries : [];
+  const typography = data.typography || {};
+  const eyebrowFont = resolveFontFamily(typography, 'contact.eyebrow');
+  const titleFont = resolveFontFamily(typography, 'contact.title');
+  const descriptionFont = resolveFontFamily(typography, 'contact.description', 'sans');
 
   return (
     <Reveal as="div" className={pageStyles.contactShell}>
       <Reveal as="header" className={pageStyles.contactIntro}>
         {contact.eyebrow ? (
-          <Reveal as="p" className={pageStyles.eyebrow} delay={0.05}>
+          <Reveal as="p" className={pageStyles.eyebrow} delay={0.05} style={{ fontFamily: eyebrowFont }}>
             {contact.eyebrow}
           </Reveal>
         ) : null}
         {contact.title ? (
-          <Reveal as="h2" className={pageStyles.title} delay={0.1}>
+          <Reveal as="h2" className={pageStyles.title} delay={0.1} style={{ fontFamily: titleFont }}>
             {contact.title}
           </Reveal>
         ) : null}
         {contact.description ? (
-          <Reveal as="p" className={pageStyles.description} delay={0.18}>
+          <Reveal as="p" className={pageStyles.description} delay={0.18} style={{ fontFamily: descriptionFont }}>
             {contact.description}
           </Reveal>
         ) : null}
@@ -57,9 +62,32 @@ const Contact = () => {
                   <Icon />
                 </span>
                 <span className={pageStyles.methodCopy}>
-                  <span className={pageStyles.methodLabel}>{entry.label || 'Contact'}</span>
-                  <span className={pageStyles.methodValue}>{displayValue}</span>
-                  {description ? <span className={pageStyles.methodNote}>{description}</span> : null}
+                  <span
+                    className={pageStyles.methodLabel}
+                    style={{ fontFamily: resolveFontFamily(typography, `contact.entries.${entry.id}.label`, 'sans') }}
+                  >
+                    {entry.label || 'Contact'}
+                  </span>
+                  <span
+                    className={pageStyles.methodValue}
+                    style={{
+                      fontFamily: resolveFontFamily(
+                        typography,
+                        `contact.entries.${entry.id}.${entry.displayValue ? 'displayValue' : 'value'}`,
+                        'sans'
+                      )
+                    }}
+                  >
+                    {displayValue}
+                  </span>
+                  {description ? (
+                    <span
+                      className={pageStyles.methodNote}
+                      style={{ fontFamily: resolveFontFamily(typography, `contact.entries.${entry.id}.note`, 'sans') }}
+                    >
+                      {description}
+                    </span>
+                  ) : null}
                 </span>
               </a>
             </Reveal>
