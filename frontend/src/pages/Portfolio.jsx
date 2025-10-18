@@ -4,11 +4,13 @@ import ProjectCard from '../components/ProjectCard.jsx';
 import styles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
 import Reveal from '../components/Reveal.jsx';
+import { getFontFamily } from '../utils/typography.js';
 
 const Portfolio = () => {
   const { data } = useData();
   const shouldReduceMotion = useReducedMotion();
   const [activeFilter, setActiveFilter] = useState('all');
+  const portfolioFont = getFontFamily(data.typography?.portfolio);
 
   const filterOptions = useMemo(
     () => [{ id: 'all', name: 'All' }, ...data.collections],
@@ -26,15 +28,15 @@ const Portfolio = () => {
   return (
     <div className={styles.section}>
       <Reveal as="div" className={styles.intro}>
-        <Reveal as="h1" delay={0.05}>
+        <Reveal as="h1" delay={0.05} style={{ fontFamily: portfolioFont }}>
           {data.portfolio.introTitle}
         </Reveal>
-        <Reveal as="p" delay={0.12}>
+        <Reveal as="p" delay={0.12} style={{ fontFamily: portfolioFont }}>
           {data.portfolio.introDescription}
         </Reveal>
         <LayoutGroup>
           <div className={styles.filters}>
-            <Reveal as="span" className={styles.filtersLabel} delay={0.16}>
+            <Reveal as="span" className={styles.filtersLabel} delay={0.16} style={{ fontFamily: portfolioFont }}>
               {data.portfolio.filtersLabel}
             </Reveal>
             <div className={styles.filtersChips}>
@@ -47,6 +49,7 @@ const Portfolio = () => {
                     type="button"
                     className={`${styles.filterButton} ${isActive ? styles.filterActive : ''}`.trim()}
                     onClick={() => setActiveFilter(option.id)}
+                    style={{ fontFamily: portfolioFont }}
                     whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
                     transition={{ type: 'spring', stiffness: 320, damping: 28 }}
                   >
@@ -65,7 +68,7 @@ const Portfolio = () => {
           </div>
         </LayoutGroup>
         {activeCollection ? (
-          <Reveal as="div" className={styles.collectionSummary} delay={0.24}>
+          <Reveal as="div" className={styles.collectionSummary} delay={0.24} style={{ fontFamily: portfolioFont }}>
             <p>{activeCollection.description}</p>
             {activeCollection.mood ? <span>{activeCollection.mood}</span> : null}
           </Reveal>

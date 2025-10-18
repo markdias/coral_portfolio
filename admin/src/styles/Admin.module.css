@@ -199,6 +199,96 @@
   color: rgba(27, 28, 38, 0.8);
 }
 
+.fontToolbar {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.fontToolbarRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.fontPreview {
+  min-width: 220px;
+  padding: 0.9rem 1.1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(27, 28, 38, 0.12);
+  background: rgba(255, 255, 255, 0.75);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.fontPreviewLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6f7080;
+}
+
+.fontPreviewSample {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: #1b1c26;
+}
+
+.fontSections {
+  border: 1px dashed rgba(27, 28, 38, 0.18);
+  border-radius: 1.1rem;
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.fontSections legend {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6f7080;
+  padding: 0 0.25rem;
+}
+
+.fontSectionOption {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.fontSectionOption input {
+  width: 18px;
+  height: 18px;
+}
+
+.fontSectionOption:hover,
+.fontSectionOption:focus-within {
+  border-color: rgba(31, 63, 255, 0.35);
+  background: rgba(31, 63, 255, 0.08);
+}
+
+.fontSectionCopy {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.fontSectionName {
+  font-weight: 600;
+  color: #1b1c26;
+}
+
+.fontSectionCurrent {
+  font-size: 0.8rem;
+  color: #4a4b58;
+}
+
 .checkboxRow {
   display: flex;
   align-items: center;

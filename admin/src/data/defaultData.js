@@ -15,6 +15,12 @@ const buildGallery = (images) =>
   images.map(({ src, alt }) => ({ id: createId('image'), src, alt }));
 
 export const defaultData = {
+  typography: {
+    home: 'display',
+    about: 'display',
+    portfolio: 'sans',
+    contact: 'sans'
+  },
   settings: {
     adminPassword: '',
     siteTitle: 'Coral Dias',
@@ -91,37 +97,25 @@ export const defaultData = {
         id: createId('stat'),
         value: '28',
         label: 'Runway capsules outfitted',
-        description: 'Signature looks sent down international runways in the last 5 years',
-        valueFont: 'display',
-        labelFont: 'sans',
-        descriptionFont: 'sans'
+        description: 'Signature looks sent down international runways in the last 5 years'
       },
       {
         id: createId('stat'),
         value: '16',
         label: 'Editorial covers featuring her prints',
-        description: 'Global glossies and indie zines spotlighting bespoke textile stories',
-        valueFont: 'display',
-        labelFont: 'sans',
-        descriptionFont: 'sans'
+        description: 'Global glossies and indie zines spotlighting bespoke textile stories'
       },
       {
         id: createId('stat'),
         value: '42',
         label: 'Botanical species catalogued for palettes',
-        description: 'Sea flora studies archived to inform limited-edition pigment labs',
-        valueFont: 'display',
-        labelFont: 'sans',
-        descriptionFont: 'sans'
+        description: 'Sea flora studies archived to inform limited-edition pigment labs'
       },
       {
         id: createId('stat'),
         value: '12',
         label: 'Residencies at coastal design labs',
-        description: 'Immersive collaborations with regenerative material innovators',
-        valueFont: 'display',
-        labelFont: 'sans',
-        descriptionFont: 'sans'
+        description: 'Immersive collaborations with regenerative material innovators'
       }
     ]
   },

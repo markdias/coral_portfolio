@@ -63,6 +63,15 @@ export const DataProvider = ({ children }) => {
     return res;
   };
 
+  const updateTypography = (updates) =>
+    setData((prev) => ({
+      ...prev,
+      typography: {
+        ...(prev.typography || {}),
+        ...updates
+      }
+    }));
+
   const updateSettings = (updates) =>
     setData((prev) => ({
       ...prev,
@@ -338,6 +347,7 @@ export const DataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       data,
+      updateTypography,
       updateSettings,
       updateHome,
       updateAbout,

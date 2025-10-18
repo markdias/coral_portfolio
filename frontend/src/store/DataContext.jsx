@@ -59,6 +59,15 @@ export const DataProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
+  const updateTypography = (updates) =>
+    setData((prev) => ({
+      ...prev,
+      typography: {
+        ...(prev.typography || {}),
+        ...updates
+      }
+    }));
+
   const updateHome = (updates) =>
     setData((prev) => ({
       ...prev,
@@ -210,6 +219,7 @@ export const DataProvider = ({ children }) => {
   const value = useMemo(
     () => ({
       data,
+      updateTypography,
       updateHome,
       updateAbout,
       updateContact,
@@ -229,10 +239,7 @@ export const DataProvider = ({ children }) => {
       createId,
       clone
     }),
-    [
-      data,
-      isAuthenticated
-    ]
+    [data, isAuthenticated]
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

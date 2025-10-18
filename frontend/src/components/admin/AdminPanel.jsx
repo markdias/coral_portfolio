@@ -6,6 +6,7 @@ import AboutEditor from './AboutEditor.jsx';
 import PortfolioEditor from './PortfolioEditor.jsx';
 import CollectionsManager from './CollectionsManager.jsx';
 import ProjectsManager from './ProjectsManager.jsx';
+import FontManager from './FontManager.jsx';
 
 const AdminPanel = () => {
   const {
@@ -13,6 +14,7 @@ const AdminPanel = () => {
     updateHome,
     updateAbout,
     updatePortfolio,
+    updateTypography,
     addCollection,
     updateCollection,
     removeCollection,
@@ -114,6 +116,8 @@ const AdminPanel = () => {
           </button>
         </div>
       </header>
+
+      <FontManager typography={data.typography} onApply={updateTypography} />
 
       <HomeEditor home={data.home} onSave={updateHome} />
 

@@ -2,28 +2,10 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../styles/Admin.module.css';
 
-const FONT_OPTIONS = [
-  {
-    label: 'Playfair Display',
-    value: 'display'
-  },
-  {
-    label: 'Plus Jakarta Sans',
-    value: 'sans'
-  },
-  {
-    label: 'Georgia',
-    value: 'serif'
-  }
-];
-
 const STAT_DEFAULTS = {
   value: '',
   label: '',
-  description: '',
-  valueFont: 'display',
-  labelFont: 'sans',
-  descriptionFont: 'sans'
+  description: ''
 };
 
 const withDefaults = (stat) => ({
@@ -85,10 +67,7 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
         ...item,
         value: (item.value ?? '').trim(),
         label: (item.label ?? '').trim(),
-        description: (item.description ?? '').trim(),
-        valueFont: item.valueFont || STAT_DEFAULTS.valueFont,
-        labelFont: item.labelFont || STAT_DEFAULTS.labelFont,
-        descriptionFont: item.descriptionFont || STAT_DEFAULTS.descriptionFont
+        description: (item.description ?? '').trim()
       }))
       .filter((item) => item.value && item.label);
 
@@ -187,47 +166,6 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
                     />
                   </div>
                 </div>
-                <div className={styles.metadataRowFields}>
-                  <div className={styles.fieldGroup}>
-                    <label>Value font</label>
-                    <select
-                      value={stat.valueFont}
-                      onChange={(event) => handleStatChange(stat.id, 'valueFont', event.target.value)}
-                    >
-                      {FONT_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles.fieldGroup}>
-                    <label>Label font</label>
-                    <select
-                      value={stat.labelFont}
-                      onChange={(event) => handleStatChange(stat.id, 'labelFont', event.target.value)}
-                    >
-                      {FONT_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles.fieldGroup}>
-                    <label>Description font</label>
-                    <select
-                      value={stat.descriptionFont}
-                      onChange={(event) => handleStatChange(stat.id, 'descriptionFont', event.target.value)}
-                    >
-                      {FONT_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
                 <div className={styles.metadataRowActions}>
                   <button
                     type="button"
@@ -263,10 +201,7 @@ AboutEditor.propTypes = {
         id: PropTypes.string.isRequired,
         value: PropTypes.string,
         label: PropTypes.string,
-        description: PropTypes.string,
-        valueFont: PropTypes.string,
-        labelFont: PropTypes.string,
-        descriptionFont: PropTypes.string
+        description: PropTypes.string
       })
     )
   }).isRequired,

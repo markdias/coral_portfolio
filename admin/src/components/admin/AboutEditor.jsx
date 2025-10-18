@@ -2,28 +2,10 @@ import PropTypes from 'prop-types';
 import styles from '../../styles/Admin.module.css';
 import PublishButton from './PublishButton.jsx';
 
-const FONT_OPTIONS = [
-  {
-    label: 'Playfair Display',
-    value: 'display'
-  },
-  {
-    label: 'Plus Jakarta Sans',
-    value: 'sans'
-  },
-  {
-    label: 'Georgia',
-    value: 'serif'
-  }
-];
-
 const STAT_DEFAULTS = {
   value: '',
   label: '',
-  description: '',
-  valueFont: 'display',
-  labelFont: 'sans',
-  descriptionFont: 'sans'
+  description: ''
 };
 
 const withDefaults = (stat) => ({
@@ -167,68 +149,6 @@ const AboutEditor = ({ about, onSave, onCreateId }) => {
                       }
                       placeholder="Additional context"
                     />
-                  </div>
-                </div>
-                <div className={styles.metadataRowFields}>
-                  <div className={styles.fieldGroup}>
-                    <label>Value font</label>
-                    <select
-                      value={stat.valueFont}
-                      onChange={(e) =>
-                        onSave({
-                          stats: updateArrayItem(about.stats, i, {
-                            ...stat,
-                            valueFont: e.target.value
-                          })
-                        })
-                      }
-                    >
-                      {FONT_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles.fieldGroup}>
-                    <label>Label font</label>
-                    <select
-                      value={stat.labelFont}
-                      onChange={(e) =>
-                        onSave({
-                          stats: updateArrayItem(about.stats, i, {
-                            ...stat,
-                            labelFont: e.target.value
-                          })
-                        })
-                      }
-                    >
-                      {FONT_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={styles.fieldGroup}>
-                    <label>Description font</label>
-                    <select
-                      value={stat.descriptionFont}
-                      onChange={(e) =>
-                        onSave({
-                          stats: updateArrayItem(about.stats, i, {
-                            ...stat,
-                            descriptionFont: e.target.value
-                          })
-                        })
-                      }
-                    >
-                      {FONT_OPTIONS.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
                   </div>
                 </div>
                 <div className={styles.metadataRowActions}>
