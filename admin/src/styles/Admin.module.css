@@ -54,7 +54,7 @@
 
 .sidebar {
   width: clamp(240px, 18vw + 120px, 320px);
-  background: linear-gradient(200deg, rgba(31, 45, 120, 0.98), rgba(18, 30, 90, 0.98));
+  background: linear-gradient(200deg, rgba(218, 108, 80, 0.98), rgba(18, 30, 90, 0.98));
   border-radius: 1.75rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 24px 60px rgba(12, 22, 60, 0.28);
