@@ -4,6 +4,7 @@ import portfolioStyles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
 import { asset } from '../utils/asset.js';
 import WatermarkedImage from '../components/WatermarkedImage.jsx';
+import Reveal from '../components/Reveal.jsx';
 
 const Home = () => {
   const { data } = useData();
@@ -11,11 +12,19 @@ const Home = () => {
 
   return (
     <div className={pageStyles.hero}>
-      <div className={pageStyles.heroContent}>
-        {data.home.eyebrow ? <span className={pageStyles.heroEyebrow}>{data.home.eyebrow}</span> : null}
-        <h1 className={pageStyles.heroTitle}>{data.home.title}</h1>
-        <p className={pageStyles.heroDescription}>{data.home.description}</p>
-        <div className={portfolioStyles.heroActions}>
+      <Reveal as="div" className={pageStyles.heroContent}>
+        {data.home.eyebrow ? (
+          <Reveal as="span" className={pageStyles.heroEyebrow} delay={0.05}>
+            {data.home.eyebrow}
+          </Reveal>
+        ) : null}
+        <Reveal as="h1" className={pageStyles.heroTitle} delay={0.1}>
+          {data.home.title}
+        </Reveal>
+        <Reveal as="p" className={pageStyles.heroDescription} delay={0.18}>
+          {data.home.description}
+        </Reveal>
+        <Reveal as="div" className={portfolioStyles.heroActions} delay={0.26}>
           {data.home.primaryCta?.href ? (
             <Link to={data.home.primaryCta.href} className={portfolioStyles.primaryButton}>
               {data.home.primaryCta.label || 'Explore portfolio'}
@@ -26,16 +35,16 @@ const Home = () => {
               {data.home.secondaryCta.label || 'About'}
             </Link>
           ) : null}
-        </div>
-      </div>
-      <div className={pageStyles.heroMedia}>
+        </Reveal>
+      </Reveal>
+      <Reveal as="div" className={pageStyles.heroMedia} delay={0.15}>
         {heroImage ? (
           <WatermarkedImage src={asset(heroImage)} alt={data.home.title} loading="lazy" />
         ) : null}
-        <span className={pageStyles.heroRibbon}>
-          {(data.home.ribbonText || 'Limited print editions')}
-        </span>
-      </div>
+        <Reveal as="span" className={pageStyles.heroRibbon} delay={0.3}>
+          {data.home.ribbonText || 'Limited print editions'}
+        </Reveal>
+      </Reveal>
     </div>
   );
 };

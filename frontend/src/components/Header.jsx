@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import styles from '../styles/Layout.module.css';
 import { useData } from '../store/DataContext.jsx';
 import { asset } from '../utils/asset.js';
@@ -16,6 +17,7 @@ const Header = () => {
   const headerRef = useRef(null);
   const { data } = useData();
   const location = useLocation();
+  const shouldReduceMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const headerNode = headerRef.current;
@@ -78,12 +80,13 @@ const Header = () => {
       <div className={styles.headerInner}>
         <NavLink to="/" className={styles.brand}>
           {data?.settings?.logo ? (
-            <img
-              className={styles.brandLogo}
-              src={asset(data.settings.logo)}
-              alt="Site logo"
-              onContextMenu={(event) => event.preventDefault()}
-            />
+            <span className={styles.brandMark}>
+              <img
+                src={asset(data.settings.logo)}
+                alt="Site logo"
+                onContextMenu={(event) => event.preventDefault()}
+              />
+            </span>
           ) : (
             <span className={styles.brandAccent} aria-hidden="true" />
           )}
@@ -100,24 +103,37 @@ const Header = () => {
           {menuOpen ? '✕' : '☰'}
         </button>
         <nav>
-          <ul
-            id="primary-navigation"
-            className={`${styles.navList} ${menuOpen ? styles.navVisible : styles.navHidden}`.trim()}
-          >
-            {navItems.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  onClick={(event) => handleNavClick(event, item)}
-                  className={({ isActive }) =>
-                    `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`.trim()
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
+          <LayoutGroup>
+            <ul
+              id="primary-navigation"
+              className={`${styles.navList} ${menuOpen ? styles.navVisible : styles.navHidden}`.trim()}
+            >
+              {navItems.map((item) => (
+                <li key={item.to}>
+                  <NavLink
+                    to={item.to}
+                    onClick={(event) => handleNavClick(event, item)}
+                    className={({ isActive }) =>
+                      `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`.trim()
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {!shouldReduceMotion && isActive ? (
+                          <motion.span
+                            layoutId="navActive"
+                            className={styles.navHighlight}
+                            transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                          />
+                        ) : null}
+                        <span>{item.label}</span>
+                      </>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </LayoutGroup>
         </nav>
       </div>
     </header>

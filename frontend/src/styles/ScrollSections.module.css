@@ -4,9 +4,10 @@
   width: 100%;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
-  scroll-padding-top: var(--header-height);
+  scroll-padding-top: calc(var(--header-height) + 1.5rem);
   background: transparent;
-  color: #2f2523;
+  color: var(--ink-primary);
+  backdrop-filter: blur(4px);
 }
 
 .snapWrapper::-webkit-scrollbar {
@@ -14,8 +15,35 @@
 }
 
 .snapWrapper::-webkit-scrollbar-thumb {
-  background: rgba(65, 55, 51, 0.18);
+  background: rgba(17, 17, 27, 0.18);
   border-radius: 999px;
+}
+
+.progressIndicator {
+  position: fixed;
+  top: calc(var(--header-height) + 0.75rem);
+  left: clamp(1.4rem, 7vw, 6rem);
+  right: clamp(1.4rem, 7vw, 6rem);
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transform-origin: 0% 50%;
+  transform: scaleX(0);
+  box-shadow: 0 10px 30px rgba(179, 106, 76, 0.26);
+  pointer-events: none;
+  z-index: 12;
+}
+
+.scrollAura {
+  position: fixed;
+  inset: -30% -10% -10% -10%;
+  background: radial-gradient(circle at 30% 20%, rgba(179, 106, 76, 0.16), transparent 55%),
+    radial-gradient(circle at 78% 72%, rgba(90, 143, 130, 0.16), transparent 55%);
+  filter: blur(40px);
+  z-index: -2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
 }
 
 .snapSection {
@@ -25,97 +53,79 @@
   scroll-snap-stop: always;
   display: flex;
   align-items: center;
-  padding: clamp(4.5rem, 8vw, 6.5rem) clamp(1.5rem, 8vw, 6rem);
+  padding: clamp(5rem, 9vw, 6.5rem) clamp(1.8rem, 8vw, 6.25rem);
   isolation: isolate;
+}
+
+.snapSection::before {
+  content: '';
+  position: absolute;
+  inset: clamp(1.2rem, 4vw, 3.4rem);
+  border-radius: clamp(1.8rem, 4.8vw, 3.6rem);
+  background: linear-gradient(135deg, rgba(255, 250, 244, 0.92), rgba(248, 240, 232, 0.9));
+  border: 1px solid rgba(120, 94, 80, 0.16);
+  box-shadow: 0 30px 70px rgba(54, 41, 35, 0.14);
+  backdrop-filter: blur(24px);
+  z-index: 0;
 }
 
 .snapSection::after {
   content: '';
   position: absolute;
-  inset: clamp(1.25rem, 4vw, 3rem);
-  border-radius: clamp(1.5rem, 5vw, 3.25rem);
-  pointer-events: none;
-  border: 1px solid rgba(73, 58, 55, 0.12);
-  mix-blend-mode: multiply;
-  opacity: 0.65;
+  inset: clamp(1.8rem, 5vw, 4rem);
+  border-radius: clamp(2.2rem, 5.6vw, 4.1rem);
+  opacity: 0.9;
+  z-index: -1;
 }
 
 .snapSection > * {
   position: relative;
   z-index: 1;
-  width: min(1100px, 100%);
+  width: min(1180px, 100%);
   margin: 0 auto;
 }
 
-.homeTone {
-  background: rgba(255, 255, 255, 0.72);
+.homeTone::after {
+  background: radial-gradient(circle at 12% 18%, rgba(179, 106, 76, 0.2), transparent 60%),
+    radial-gradient(circle at 78% 82%, rgba(214, 164, 100, 0.18), transparent 65%);
 }
 
-.homeTone::before {
-  content: '';
-  position: absolute;
-  inset: 6% clamp(1.5rem, 5vw, 4rem) auto clamp(1.5rem, 5vw, 4rem);
-  height: clamp(140px, 24vh, 220px);
-  border-radius: 999px;
-  background: rgba(219, 170, 152, 0.28);
-  filter: blur(0.5px);
-  z-index: 0;
+.aboutTone::after {
+  background: radial-gradient(circle at 18% 72%, rgba(90, 143, 130, 0.24), transparent 55%),
+    radial-gradient(circle at 85% 28%, rgba(179, 106, 76, 0.18), transparent 60%);
 }
 
-.aboutTone {
-  background: rgba(255, 255, 255, 0.72);
+.portfolioTone::after {
+  background: radial-gradient(circle at 18% 18%, rgba(179, 106, 76, 0.22), transparent 60%),
+    radial-gradient(circle at 82% 80%, rgba(214, 164, 100, 0.24), transparent 58%);
 }
 
-.aboutTone::before {
-  content: '';
-  position: absolute;
-  inset: auto clamp(1.5rem, 6vw, 4.5rem) 7% clamp(1.5rem, 6vw, 4.5rem);
-  height: clamp(160px, 26vh, 240px);
-  border-radius: 56% 44% 58% 42% / 48% 42% 58% 52%;
-  background: rgba(174, 196, 198, 0.26);
-  filter: blur(0.8px);
-  z-index: 0;
-}
-
-.portfolioTone {
-  background: rgba(255, 255, 255, 0.72);
-}
-
-.portfolioTone::before {
-  content: '';
-  position: absolute;
-  inset: clamp(2rem, 7vw, 4.5rem) clamp(1.75rem, 8vw, 5rem);
-  border-radius: 40% 60% 58% 42% / 52% 46% 54% 48%;
-  background: rgba(199, 169, 209, 0.25);
-  filter: blur(0.6px);
-  z-index: 0;
-}
-
-.contactTone {
-  background: rgba(255, 255, 255, 0.76);
-}
-
-.contactTone::before {
-  content: '';
-  position: absolute;
-  inset: clamp(2.2rem, 6vw, 4.2rem) clamp(1.5rem, 7vw, 4.4rem);
-  border-radius: 46% 54% 48% 52% / 42% 58% 46% 54%;
-  background: rgba(174, 196, 198, 0.24);
-  filter: blur(0.7px);
-  z-index: 0;
+.contactTone::after {
+  background: radial-gradient(circle at 24% 30%, rgba(90, 143, 130, 0.26), transparent 58%),
+    radial-gradient(circle at 74% 72%, rgba(214, 164, 100, 0.22), transparent 62%);
 }
 
 @media (max-width: 768px) {
   .snapWrapper {
-    scroll-padding-top: calc(var(--header-height) + 1rem);
+    scroll-padding-top: calc(var(--header-height) + 1.25rem);
+  }
+
+  .progressIndicator {
+    left: clamp(1rem, 8vw, 3rem);
+    right: clamp(1rem, 8vw, 3rem);
   }
 
   .snapSection {
-    padding: clamp(3.25rem, 12vw, 4.5rem) clamp(1.25rem, 6vw, 3rem);
+    padding: clamp(4rem, 12vw, 5rem) clamp(1.25rem, 6vw, 3rem);
+  }
+
+  .snapSection::before {
+    inset: clamp(0.95rem, 6vw, 2.5rem);
+    border-radius: clamp(1.4rem, 6vw, 2.6rem);
   }
 
   .snapSection::after {
-    inset: clamp(0.85rem, 5vw, 2.25rem);
-    border-radius: clamp(1.25rem, 7vw, 2.5rem);
+    inset: clamp(1.4rem, 7vw, 3rem);
+    border-radius: clamp(1.8rem, 8vw, 3.2rem);
   }
 }

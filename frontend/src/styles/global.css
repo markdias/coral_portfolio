@@ -1,16 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  font-family: 'Work Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #2f2523;
-  /* Cohesive base background tone */
-  --bg-base: #f7f4ef;
-  --bg-ink: #2f2523;
-  --header-padding-y: clamp(1rem, 2.8vw, 1.6rem);
-  --header-height: calc((var(--header-padding-y) * 2) + 44px + env(safe-area-inset-top, 0px));
-  line-height: 1.6;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.7;
   font-weight: 400;
   color-scheme: light;
+  --ink-primary: #2f241f;
+  --ink-secondary: rgba(59, 45, 39, 0.82);
+  --ink-tertiary: #7d6b62;
+  --surface-glass: rgba(255, 250, 244, 0.92);
+  --surface-muted: rgba(255, 250, 244, 0.76);
+  --surface-border: rgba(89, 64, 51, 0.1);
+  --accent-primary: #b36a4c;
+  --accent-secondary: #d6a464;
+  --accent-tertiary: #5a8f82;
+  --accent-ink: #2a1b16;
+  --shadow-soft: 0 28px 80px rgba(54, 41, 35, 0.12);
+  --shadow-hard: 0 40px 120px rgba(54, 41, 35, 0.18);
+  --header-padding-y: clamp(1rem, 2.6vw, 1.8rem);
+  --header-height: calc((var(--header-padding-y) * 2) + 48px + env(safe-area-inset-top, 0px));
+  color: var(--ink-primary);
 }
 
 html {
@@ -26,12 +35,26 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  /* Subtle, professional background with gentle vignette */
+  background: radial-gradient(circle at 18% 22%, rgba(179, 106, 76, 0.12), transparent 58%),
+    radial-gradient(circle at 88% 72%, rgba(90, 143, 130, 0.14), transparent 62%),
+    linear-gradient(140deg, #f8f2ec 0%, #f4ede6 42%, #fbf7f1 100%);
+  background-attachment: fixed;
+  color: var(--ink-primary);
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -18% -24% -26% -18%;
+  z-index: -1;
   background:
-    radial-gradient(1200px 800px at 100% -200px, rgba(35, 29, 28, 0.06), rgba(247, 244, 239, 0) 70%),
-    radial-gradient(900px 700px at -200px 100%, rgba(35, 29, 28, 0.04), rgba(247, 244, 239, 0) 70%),
-    var(--bg-base);
-  color: var(--bg-ink);
+    radial-gradient(circle at 28% 28%, rgba(179, 106, 76, 0.15), transparent 55%),
+    radial-gradient(circle at 76% 68%, rgba(214, 164, 100, 0.18), transparent 58%);
+  filter: blur(120px);
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 a {
@@ -53,6 +76,15 @@ button {
   font-family: inherit;
 }
 
+.playfair {
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+}
+
+.accentText {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
 .visuallyHidden {
   position: absolute;
   width: 1px;
@@ -63,4 +95,15 @@ button {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+::selection {
+  background: rgba(179, 106, 76, 0.25);
+  color: #fdfaf5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    background-attachment: scroll;
+  }
 }

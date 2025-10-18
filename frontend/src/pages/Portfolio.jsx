@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react';
+import { LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import ProjectCard from '../components/ProjectCard.jsx';
 import styles from '../styles/Portfolio.module.css';
 import { useData } from '../store/DataContext.jsx';
+import Reveal from '../components/Reveal.jsx';
 
 const Portfolio = () => {
   const { data } = useData();
+  const shouldReduceMotion = useReducedMotion();
   const [activeFilter, setActiveFilter] = useState('all');
 
   const filterOptions = useMemo(
@@ -22,34 +25,57 @@ const Portfolio = () => {
 
   return (
     <div className={styles.section}>
-      <div className={styles.intro}>
-        <h1>{data.portfolio.introTitle}</h1>
-        <p>{data.portfolio.introDescription}</p>
-        <div className={styles.filters}>
-          <span className={styles.filtersLabel}>{data.portfolio.filtersLabel}</span>
-          <div className={styles.filtersChips}>
-            {filterOptions.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                className={`${styles.filterButton} ${activeFilter === option.id ? styles.filterActive : ''}`.trim()}
-                onClick={() => setActiveFilter(option.id)}
-              >
-                {option.name}
-              </button>
-            ))}
+      <Reveal as="div" className={styles.intro}>
+        <Reveal as="h1" delay={0.05}>
+          {data.portfolio.introTitle}
+        </Reveal>
+        <Reveal as="p" delay={0.12}>
+          {data.portfolio.introDescription}
+        </Reveal>
+        <LayoutGroup>
+          <div className={styles.filters}>
+            <Reveal as="span" className={styles.filtersLabel} delay={0.16}>
+              {data.portfolio.filtersLabel}
+            </Reveal>
+            <div className={styles.filtersChips}>
+              {filterOptions.map((option) => {
+                const isActive = activeFilter === option.id;
+
+                return (
+                  <motion.button
+                    key={option.id}
+                    type="button"
+                    className={`${styles.filterButton} ${isActive ? styles.filterActive : ''}`.trim()}
+                    onClick={() => setActiveFilter(option.id)}
+                    whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                  >
+                    {!shouldReduceMotion && isActive ? (
+                      <motion.span
+                        layoutId="filterHighlight"
+                        className={styles.filterHighlight}
+                        transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+                      />
+                    ) : null}
+                    <span className={styles.filterLabel}>{option.name}</span>
+                  </motion.button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </LayoutGroup>
         {activeCollection ? (
-          <div className={styles.collectionSummary}>
+          <Reveal as="div" className={styles.collectionSummary} delay={0.24}>
             <p>{activeCollection.description}</p>
             {activeCollection.mood ? <span>{activeCollection.mood}</span> : null}
-          </div>
+          </Reveal>
         ) : null}
-      </div>
+      </Reveal>
       <div className={styles.cardsGrid}>
-        {filteredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+        {filteredProjects.map((project, index) => (
+          <Reveal key={project.id} delay={0.08 * (index % 4)}>
+            <ProjectCard project={project} />
+          </Reveal>
         ))}
       </div>
     </div>

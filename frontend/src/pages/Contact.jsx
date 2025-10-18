@@ -8,6 +8,7 @@ import {
   resolveContactHref,
   shouldOpenInNewTab
 } from '../utils/contact.jsx';
+import Reveal from '../components/Reveal.jsx';
 
 const Contact = () => {
   const { data } = useData();
@@ -15,15 +16,27 @@ const Contact = () => {
   const entries = Array.isArray(contact.entries) ? contact.entries : [];
 
   return (
-    <div className={pageStyles.contactShell}>
-      <header className={pageStyles.contactIntro}>
-        {contact.eyebrow ? <p className={pageStyles.eyebrow}>{contact.eyebrow}</p> : null}
-        {contact.title ? <h2 className={pageStyles.title}>{contact.title}</h2> : null}
-        {contact.description ? <p className={pageStyles.description}>{contact.description}</p> : null}
-      </header>
+    <Reveal as="div" className={pageStyles.contactShell}>
+      <Reveal as="header" className={pageStyles.contactIntro}>
+        {contact.eyebrow ? (
+          <Reveal as="p" className={pageStyles.eyebrow} delay={0.05}>
+            {contact.eyebrow}
+          </Reveal>
+        ) : null}
+        {contact.title ? (
+          <Reveal as="h2" className={pageStyles.title} delay={0.1}>
+            {contact.title}
+          </Reveal>
+        ) : null}
+        {contact.description ? (
+          <Reveal as="p" className={pageStyles.description} delay={0.18}>
+            {contact.description}
+          </Reveal>
+        ) : null}
+      </Reveal>
 
       <ul className={pageStyles.methods}>
-        {entries.map((entry) => {
+        {entries.map((entry, index) => {
           const href = resolveContactHref(entry.value || '');
           const { Icon, type } = getContactIcon(entry);
           const displayValue = formatDisplayValue(entry);
@@ -32,7 +45,7 @@ const Contact = () => {
           const openInNewTab = shouldOpenInNewTab(href);
 
           return (
-            <li key={entry.id} className={pageStyles.methodCard}>
+            <Reveal as="li" key={entry.id} className={pageStyles.methodCard} delay={0.1 + index * 0.06}>
               <a
                 className={pageStyles.methodLink}
                 href={href}
@@ -49,11 +62,11 @@ const Contact = () => {
                   {description ? <span className={pageStyles.methodNote}>{description}</span> : null}
                 </span>
               </a>
-            </li>
+            </Reveal>
           );
         })}
       </ul>
-    </div>
+    </Reveal>
   );
 };
 
