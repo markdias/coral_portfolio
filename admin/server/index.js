@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import { pathToFileURL } from 'node:url';
 import multer from 'multer';
 import sharp from 'sharp';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
 
 dotenv.config();
 
@@ -19,6 +21,22 @@ app.use(express.json({ limit: '2mb' }));
 app.use('/images', express.static(path.resolve(__dirname, '../../frontend/public/images')));
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const execAsync = promisify(exec);
+const repoRoot = path.resolve(__dirname, '../../..');
+
+async function runGit(command) {
+  try {
+    const { stdout, stderr } = await execAsync(command, { cwd: repoRoot });
+    return { ok: true, stdout: stdout?.trim?.() ?? '', stderr: stderr?.trim?.() ?? '' };
+  } catch (error) {
+    return {
+      ok: false,
+      stdout: error?.stdout?.trim?.() ?? '',
+      stderr: error?.stderr?.trim?.() ?? '',
+      message: error?.message || 'Command failed'
+    };
+  }
+}
 
 // Only allow localhost access
 app.use((req, res, next) => {
@@ -119,6 +137,102 @@ app.post('/api/media/init', requireAdmin, async (req, res) => {
   } catch (err) {
     console.error('media init failed', err);
     res.status(500).send('Init failed');
+  }
+});
+
+app.post('/api/git/commit-sync', requireAdmin, async (req, res) => {
+  const { branchName, commitMessage } = req.body || {};
+  const logs = [];
+
+  const sanitizedBranch = typeof branchName === 'string' ? branchName.trim() : '';
+  const sanitizedMessage = typeof commitMessage === 'string' ? commitMessage.trim() : '';
+
+  if (!sanitizedBranch || !/^[A-Za-z0-9._\-/]+$/.test(sanitizedBranch)) {
+    return res.status(400).json({
+      ok: false,
+      error: 'A valid branch name is required (letters, numbers, ".", "-", "_", and "/" only).'
+    });
+  }
+
+  if (!sanitizedMessage) {
+    return res.status(400).json({ ok: false, error: 'A commit message is required.' });
+  }
+
+  let startingBranch = null;
+  let changedBranch = false;
+
+  try {
+    const statusResult = await runGit('git status --porcelain');
+    logs.push({ step: 'Check working tree', command: 'git status --porcelain', ...statusResult });
+    if (!statusResult.ok) {
+      throw new Error(statusResult.message || 'Unable to inspect repository status');
+    }
+    if (!statusResult.stdout) {
+      return res.status(400).json({
+        ok: false,
+        error: 'No changes detected to commit.',
+        steps: logs
+      });
+    }
+
+    const currentBranchResult = await runGit('git rev-parse --abbrev-ref HEAD');
+    logs.push({ step: 'Resolve current branch', command: 'git rev-parse --abbrev-ref HEAD', ...currentBranchResult });
+    if (!currentBranchResult.ok) {
+      throw new Error(currentBranchResult.message || 'Unable to read current branch');
+    }
+    startingBranch = currentBranchResult.stdout || 'main';
+
+    const branchCheckResult = await runGit(`git rev-parse --verify ${sanitizedBranch}`);
+    logs.push({ step: 'Check if branch exists', command: `git rev-parse --verify ${sanitizedBranch}`, ...branchCheckResult });
+
+    if (!branchCheckResult.ok) {
+      const checkoutNewResult = await runGit(`git checkout -b ${sanitizedBranch}`);
+      logs.push({ step: 'Create branch', command: `git checkout -b ${sanitizedBranch}`, ...checkoutNewResult });
+      if (!checkoutNewResult.ok) {
+        throw new Error(checkoutNewResult.message || 'Failed to create branch');
+      }
+      changedBranch = true;
+    } else {
+      const checkoutExistingResult = await runGit(`git checkout ${sanitizedBranch}`);
+      logs.push({ step: 'Switch to branch', command: `git checkout ${sanitizedBranch}`, ...checkoutExistingResult });
+      if (!checkoutExistingResult.ok) {
+        throw new Error(checkoutExistingResult.message || 'Failed to switch to branch');
+      }
+      if (startingBranch !== sanitizedBranch) {
+        changedBranch = true;
+      }
+    }
+
+    const addResult = await runGit('git add -A');
+    logs.push({ step: 'Stage changes', command: 'git add -A', ...addResult });
+    if (!addResult.ok) {
+      throw new Error(addResult.message || 'Failed to stage changes');
+    }
+
+    const commitResult = await runGit(`git commit -m ${JSON.stringify(sanitizedMessage)}`);
+    logs.push({ step: 'Commit changes', command: `git commit -m ${JSON.stringify(sanitizedMessage)}`, ...commitResult });
+    if (!commitResult.ok) {
+      throw new Error(commitResult.message || 'Failed to commit changes');
+    }
+
+    const pushResult = await runGit(`git push -u origin ${sanitizedBranch}`);
+    logs.push({ step: 'Push branch', command: `git push -u origin ${sanitizedBranch}`, ...pushResult });
+    if (!pushResult.ok) {
+      throw new Error(pushResult.message || 'Failed to push branch');
+    }
+
+    return res.json({ ok: true, steps: logs, branch: sanitizedBranch, startingBranch });
+  } catch (error) {
+    if (changedBranch && startingBranch && sanitizedBranch !== startingBranch) {
+      const restoreResult = await runGit(`git checkout ${startingBranch}`);
+      logs.push({ step: 'Restore starting branch', command: `git checkout ${startingBranch}`, ...restoreResult });
+    }
+
+    return res.status(500).json({
+      ok: false,
+      error: error?.message || 'Git operation failed',
+      steps: logs
+    });
   }
 });
 

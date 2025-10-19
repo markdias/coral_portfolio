@@ -10,6 +10,87 @@ import ProjectsManager from './ProjectsManager.jsx';
 import SiteSettings from './SiteSettings.jsx';
 import FontManager from './FontManager.jsx';
 
+const formatPath = (segments) =>
+  segments.reduce((acc, segment) => {
+    if (segment === undefined || segment === null || segment === '') return acc;
+    const stringSegment = typeof segment === 'string' ? segment : String(segment);
+    if (/^\d+$/.test(stringSegment)) {
+      return acc ? `${acc}[${stringSegment}]` : `[${stringSegment}]`;
+    }
+    if (stringSegment.startsWith('[')) {
+      return `${acc || ''}${stringSegment}`;
+    }
+    return acc ? `${acc}.${stringSegment}` : stringSegment;
+  }, '');
+
+const labelForPath = (segments, fallback = 'Entire section') => {
+  const path = formatPath(segments);
+  return path || fallback;
+};
+
+const collectFieldChanges = (initialValue, currentValue, path = []) => {
+  if (typeof initialValue === 'undefined') {
+    return [`${labelForPath(path)} (added)`];
+  }
+  if (typeof currentValue === 'undefined') {
+    return [`${labelForPath(path)} (removed)`];
+  }
+
+  const initialIsArray = Array.isArray(initialValue);
+  const currentIsArray = Array.isArray(currentValue);
+  if (initialIsArray || currentIsArray) {
+    if (!initialIsArray || !currentIsArray) {
+      return [`${labelForPath(path)} (type changed)`];
+    }
+    const differences = [];
+    if (initialValue.length !== currentValue.length) {
+      differences.push(`${labelForPath(path)} (length changed)`);
+    }
+    const maxLength = Math.max(initialValue.length, currentValue.length);
+    for (let index = 0; index < maxLength; index += 1) {
+      if (index >= initialValue.length) {
+        differences.push(`${labelForPath([...path, index], 'Item')} (added)`);
+      } else if (index >= currentValue.length) {
+        differences.push(`${labelForPath([...path, index], 'Item')} (removed)`);
+      } else {
+        differences.push(
+          ...collectFieldChanges(initialValue[index], currentValue[index], [...path, index])
+        );
+      }
+    }
+    return Array.from(new Set(differences));
+  }
+
+  const initialIsObject = initialValue && typeof initialValue === 'object';
+  const currentIsObject = currentValue && typeof currentValue === 'object';
+
+  if (!initialIsObject || !currentIsObject) {
+    if (!Object.is(initialValue, currentValue)) {
+      return [labelForPath(path)];
+    }
+    return [];
+  }
+
+  const differences = [];
+  const keys = new Set([
+    ...Object.keys(initialValue ?? {}),
+    ...Object.keys(currentValue ?? {})
+  ]);
+  keys.forEach((key) => {
+    if (!(key in (initialValue ?? {}))) {
+      differences.push(`${labelForPath([...path, key])} (added)`);
+    } else if (!(key in (currentValue ?? {}))) {
+      differences.push(`${labelForPath([...path, key])} (removed)`);
+    } else {
+      differences.push(
+        ...collectFieldChanges(initialValue[key], currentValue[key], [...path, key])
+      );
+    }
+  });
+
+  return Array.from(new Set(differences));
+};
+
 const AdminPanel = () => {
   const {
     data,
@@ -34,13 +115,18 @@ const AdminPanel = () => {
     createId,
     replaceData,
     publishToFrontend,
-    clone
+    clone,
+    commitAndSync
   } = useData();
 
   const [importMessage, setImportMessage] = useState('');
   const [publishMessage, setPublishMessage] = useState('');
   const [reloadMessage, setReloadMessage] = useState('');
   const [changedSections, setChangedSections] = useState([]);
+  const [gitBranchName, setGitBranchName] = useState('');
+  const [gitCommitMessage, setGitCommitMessage] = useState('');
+  const [gitResult, setGitResult] = useState(null);
+  const [isGitSubmitting, setIsGitSubmitting] = useState(false);
   const sections = useMemo(
     () => [
       {
@@ -152,6 +238,57 @@ const AdminPanel = () => {
       return nextChanged;
     });
   }, [data, trackedSections]);
+
+  const changedSectionDetails = useMemo(() => {
+    if (!initialDataRef.current) return [];
+    return sections
+      .filter((section) => changedSections.includes(section.id))
+      .map((section) => {
+        const trackKey = section.trackKey;
+        const initialValue = trackKey ? initialDataRef.current?.[trackKey] : undefined;
+        const currentValue = trackKey ? data?.[trackKey] : undefined;
+        const fields = trackKey
+          ? collectFieldChanges(initialValue, currentValue, [])
+          : [];
+        return {
+          ...section,
+          fields
+        };
+      });
+  }, [changedSections, data, sections]);
+
+  const handleGitCommit = async (event) => {
+    event.preventDefault();
+    setGitResult(null);
+
+    const trimmedBranch = gitBranchName.trim();
+    const trimmedMessage = gitCommitMessage.trim();
+    if (!trimmedBranch || !trimmedMessage) {
+      setGitResult({
+        success: false,
+        message: 'Both a branch name and commit message are required to sync with Git.'
+      });
+      return;
+    }
+
+    setIsGitSubmitting(true);
+    const result = await commitAndSync({ branchName: trimmedBranch, commitMessage: trimmedMessage });
+    if (result.success) {
+      setGitResult({
+        success: true,
+        message: `Committed and pushed to ${result.branch || trimmedBranch}.`,
+        steps: result.steps || []
+      });
+      setGitCommitMessage('');
+    } else {
+      setGitResult({
+        success: false,
+        message: result.error || result.message || 'Git sync failed.',
+        steps: result.steps || []
+      });
+    }
+    setIsGitSubmitting(false);
+  };
 
   const handleExportJson = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -319,7 +456,6 @@ const AdminPanel = () => {
           </div>
         );
       case 'change-log': {
-        const changedDetails = sections.filter((section) => changedSections.includes(section.id));
         return (
           <div className={styles.panelCard}>
             <h2 className={styles.panelTitle}>Change tracker</h2>
@@ -330,16 +466,94 @@ const AdminPanel = () => {
               <p className={styles.note}>No edits detected since this page loaded.</p>
             ) : (
               <ul className={styles.changeList}>
-                {changedDetails.map((section) => (
+                {changedSectionDetails.map((section) => (
                   <li key={section.id} className={styles.changeListItem}>
-                    <span className={styles.changeListIcon} aria-hidden="true">
-                      {section.icon}
-                    </span>
-                    <span className={styles.changeListLabel}>{section.label}</span>
+                    <div className={styles.changeListHeader}>
+                      <span className={styles.changeListIcon} aria-hidden="true">
+                        {section.icon}
+                      </span>
+                      <span className={styles.changeListLabel}>{section.label}</span>
+                    </div>
+                    {section.fields.length > 0 ? (
+                      <ul className={styles.changeFieldList}>
+                        {section.fields.map((field) => (
+                          <li key={field} className={styles.changeFieldItem}>
+                            <span className={styles.changeFieldTag}>{field}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
                   </li>
                 ))}
               </ul>
             )}
+            <div className={styles.gitSyncCard}>
+              <h3 className={styles.gitSyncTitle}>Commit and sync with Git</h3>
+              <p className={styles.gitSyncDescription}>
+                Create or update a branch, commit your admin edits, and push them to the remote repository.
+              </p>
+              <form className={styles.gitSyncForm} onSubmit={handleGitCommit}>
+                <label className={styles.gitSyncField}>
+                  <span className={styles.gitSyncLabel}>Branch name</span>
+                  <input
+                    type="text"
+                    className={styles.gitSyncInput}
+                    value={gitBranchName}
+                    onChange={(event) => setGitBranchName(event.target.value)}
+                    placeholder="feature/change-tracker"
+                    autoComplete="off"
+                  />
+                </label>
+                <label className={styles.gitSyncField}>
+                  <span className={styles.gitSyncLabel}>Commit message</span>
+                  <textarea
+                    className={styles.gitSyncTextarea}
+                    rows={3}
+                    value={gitCommitMessage}
+                    onChange={(event) => setGitCommitMessage(event.target.value)}
+                    placeholder="Summarise the edits you made"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className={styles.primaryButton}
+                  disabled={isGitSubmitting}
+                >
+                  {isGitSubmitting ? 'Syncing…' : 'Commit & push changes'}
+                </button>
+              </form>
+              {gitResult ? (
+                <div
+                  className={
+                    gitResult.success ? styles.gitSyncSuccessMessage : styles.gitSyncErrorMessage
+                  }
+                >
+                  <p className={styles.gitSyncStatus}>{gitResult.message}</p>
+                  {Array.isArray(gitResult.steps) && gitResult.steps.length > 0 ? (
+                    <details className={styles.gitSyncDetails}>
+                      <summary className={styles.gitSyncSummary}>View git command log</summary>
+                      <ol className={styles.gitSyncStepList}>
+                        {gitResult.steps.map((step, index) => (
+                          <li key={`${step.command}-${index}`} className={styles.gitSyncStepItem}>
+                            <p className={styles.gitSyncStepTitle}>{step.step || step.command}</p>
+                            <code className={styles.gitSyncStepCommand}>{step.command}</code>
+                            {step.stdout ? (
+                              <pre className={styles.gitSyncOutput}>{step.stdout}</pre>
+                            ) : null}
+                            {step.stderr ? (
+                              <pre className={styles.gitSyncOutputError}>{step.stderr}</pre>
+                            ) : null}
+                            {step.ok === false && step.message ? (
+                              <p className={styles.gitSyncOutputError}>{step.message}</p>
+                            ) : null}
+                          </li>
+                        ))}
+                      </ol>
+                    </details>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
           </div>
         );
       }
