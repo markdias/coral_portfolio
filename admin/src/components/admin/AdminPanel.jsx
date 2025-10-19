@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../../styles/Admin.module.css';
 import { useData } from '../../store/DataContext.jsx';
 import HomeEditor from './HomeEditor.jsx';
@@ -33,61 +33,71 @@ const AdminPanel = () => {
     resetData,
     createId,
     replaceData,
-    publishToFrontend
+    publishToFrontend,
+    clone
   } = useData();
 
   const [importMessage, setImportMessage] = useState('');
   const [publishMessage, setPublishMessage] = useState('');
   const [reloadMessage, setReloadMessage] = useState('');
+  const [changedSections, setChangedSections] = useState([]);
   const sections = useMemo(
     () => [
       {
         id: 'site-settings',
         label: 'Site settings',
         icon: '⚙︎',
-        description: 'Configure global branding, metadata, and protection settings.'
+        description: 'Configure global branding, metadata, and protection settings.',
+        trackKey: 'settings'
       },
       {
         id: 'home',
         label: 'Home',
         icon: '🏠',
-        description: 'Curate the hero copy and featured callouts on the landing page.'
+        description: 'Curate the hero copy and featured callouts on the landing page.',
+        trackKey: 'home'
       },
       {
         id: 'about',
         label: 'About',
         icon: '🖊',
-        description: 'Edit biography, capabilities, and recognition details.'
+        description: 'Edit biography, capabilities, and recognition details.',
+        trackKey: 'about'
       },
       {
         id: 'portfolio',
         label: 'Portfolio',
         icon: '🖼',
-        description: 'Adjust gallery filters and supporting copy for the portfolio section.'
+        description: 'Adjust gallery filters and supporting copy for the portfolio section.',
+        trackKey: 'portfolio'
       },
       {
         id: 'contact',
         label: 'Contact',
         icon: '✉︎',
-        description: 'Manage contact methods, quick links, and their presentation order.'
+        description: 'Manage contact methods, quick links, and their presentation order.',
+        trackKey: 'contact'
       },
       {
         id: 'collections',
         label: 'Collections',
         icon: '🗂',
-        description: 'Organise art collections and link them with featured projects.'
+        description: 'Organise art collections and link them with featured projects.',
+        trackKey: 'collections'
       },
       {
         id: 'projects',
         label: 'Projects',
         icon: '📁',
-        description: 'Create and update individual projects, galleries, and metadata.'
+        description: 'Create and update individual projects, galleries, and metadata.',
+        trackKey: 'projects'
       },
       {
         id: 'typography',
         label: 'Typography',
         icon: 'Aa',
-        description: 'Apply curated fonts across sections using the typography manager.'
+        description: 'Apply curated fonts across sections using the typography manager.',
+        trackKey: 'typography'
       },
       {
         id: 'publish',
@@ -100,12 +110,48 @@ const AdminPanel = () => {
         label: 'Content data',
         icon: '💾',
         description: 'Back up or import your entire content dataset as JSON.'
+      },
+      {
+        id: 'change-log',
+        label: 'Change tracker',
+        icon: '📝',
+        description: 'Review which sections differ from their initial values during this session.'
       }
     ],
     []
   );
   const [activeSection, setActiveSection] = useState(sections[0].id);
   const fileInputId = 'content-import-file';
+  const initialDataRef = useRef(null);
+
+  if (!initialDataRef.current) {
+    initialDataRef.current = clone(data);
+  }
+
+  const trackedSections = useMemo(
+    () => sections.filter((section) => section.trackKey),
+    [sections]
+  );
+
+  useEffect(() => {
+    if (!initialDataRef.current) return;
+
+    const nextChanged = trackedSections
+      .filter((section) => {
+        const key = section.trackKey;
+        const initialValue = initialDataRef.current?.[key];
+        const currentValue = data?.[key];
+        return JSON.stringify(initialValue) !== JSON.stringify(currentValue);
+      })
+      .map((section) => section.id);
+
+    setChangedSections((prev) => {
+      if (prev.length === nextChanged.length && prev.every((id, index) => id === nextChanged[index])) {
+        return prev;
+      }
+      return nextChanged;
+    });
+  }, [data, trackedSections]);
 
   const handleExportJson = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -272,6 +318,31 @@ const AdminPanel = () => {
             </div>
           </div>
         );
+      case 'change-log': {
+        const changedDetails = sections.filter((section) => changedSections.includes(section.id));
+        return (
+          <div className={styles.panelCard}>
+            <h2 className={styles.panelTitle}>Change tracker</h2>
+            <p className={styles.panelDescription}>
+              Keep tabs on which editors now differ from the dataset that loaded with this session.
+            </p>
+            {changedSections.length === 0 ? (
+              <p className={styles.note}>No edits detected since this page loaded.</p>
+            ) : (
+              <ul className={styles.changeList}>
+                {changedDetails.map((section) => (
+                  <li key={section.id} className={styles.changeListItem}>
+                    <span className={styles.changeListIcon} aria-hidden="true">
+                      {section.icon}
+                    </span>
+                    <span className={styles.changeListLabel}>{section.label}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      }
       default:
         return null;
     }

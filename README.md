@@ -64,6 +64,7 @@ persistent sidebar—pick any section in the left rail to load its tools into th
 surfaces its publish action in a compact toolbar above the section header, so you can quickly push updates without scrolling.
 A rose gold accent palette now highlights buttons, focus rings, and selection states so the studio retains its polish while
 matching the updated brand direction.
+A change tracker view beneath the Content data tools keeps a running list of which sections have been edited since the admin panel loaded so you know exactly what still needs to be published.
 A collapsible typography manager now lives in its own navigation section so you can apply curated typefaces to individual text fields across
 the Home, About, Portfolio, and Contact sections in one pass.
 
