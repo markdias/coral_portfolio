@@ -58,12 +58,23 @@ npm run dev
 Sign in using the password from your `.env`. Edits are saved to your browser. Click “Publish to frontend” to write the
 current dataset to `frontend/src/data/defaultData.js`.
 
+#### Git sync prerequisites
+
+The Git tools in the admin studio execute local `git` commands from the repository root. Make sure you start the admin
+API from within the cloned repository so it can detect your existing branches, and confirm `git` is installed with access
+to the remote you plan to push to (for example, `origin`).
+
+The API now attempts to automatically mark the repository as a trusted Git directory. If you still see the "Unable to load
+Git branches" warning, stop the dev server, run `git config --global --add safe.directory "$(pwd)"` from the repository
+root, and restart the admin API so Git recognizes the working tree owner.
+
 The admin studio now includes a contact editor. You can add email, phone numbers, or any URL and the frontend will infer a
 matching icon automatically when visitors browse the contact section. The dashboard adopts a WordPress-style layout with a
 persistent sidebar—pick any section in the left rail to load its tools into the main workspace on the right. Each editor now
 surfaces its publish action in a compact toolbar above the section header, so you can quickly push updates without scrolling.
 A rose gold accent palette now highlights buttons, focus rings, and selection states so the studio retains its polish while
 matching the updated brand direction.
+A change tracker view beneath the Content data tools keeps a running list of which sections have been edited since the admin panel loaded so you know exactly what still needs to be published. Each entry expands with the exact fields touched, and the panel now includes controls to create a branch, capture a commit message, and push those edits to your GitHub remote without leaving the admin. The Git tools now surface a dropdown of local branches and pre-fill the commit message with a concise summary of the detected edits so you can review or tweak the generated message before syncing.
 A collapsible typography manager now lives in its own navigation section so you can apply curated typefaces to individual text fields across
 the Home, About, Portfolio, and Contact sections in one pass.
 

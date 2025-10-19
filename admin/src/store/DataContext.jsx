@@ -344,6 +344,47 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const listGitBranches = async () => {
+    try {
+      const res = await apiFetch('/api/git/branches');
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        return {
+          success: false,
+          ...(payload && typeof payload === 'object' ? payload : {}),
+          status: res.status
+        };
+      }
+      const { branches = [], current = '' } = payload || {};
+      return { success: true, branches, current };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
+  const commitAndSync = async ({ branchName, commitMessage }) => {
+    try {
+      const res = await apiFetch('/api/git/commit-sync', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ branchName, commitMessage })
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        return {
+          success: false,
+          ...(payload && typeof payload === 'object' ? payload : {}),
+          status: res.status
+        };
+      }
+      return { success: true, ...(payload && typeof payload === 'object' ? payload : {}) };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
   const value = useMemo(
     () => ({
       data,
@@ -370,7 +411,9 @@ export const DataProvider = ({ children }) => {
       replaceData,
       createId,
       clone,
-      publishToFrontend
+      publishToFrontend,
+      commitAndSync,
+      listGitBranches
     }),
     [data, isAuthenticated]
   );
