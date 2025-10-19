@@ -58,6 +58,12 @@ npm run dev
 Sign in using the password from your `.env`. Edits are saved to your browser. Click “Publish to frontend” to write the
 current dataset to `frontend/src/data/defaultData.js`.
 
+#### Git sync prerequisites
+
+The Git tools in the admin studio execute local `git` commands from the repository root. Make sure you start the admin
+API from within the cloned repository so it can detect your existing branches, and confirm `git` is installed with access
+to the remote you plan to push to (for example, `origin`).
+
 The admin studio now includes a contact editor. You can add email, phone numbers, or any URL and the frontend will infer a
 matching icon automatically when visitors browse the contact section. The dashboard adopts a WordPress-style layout with a
 persistent sidebar—pick any section in the left rail to load its tools into the main workspace on the right. Each editor now

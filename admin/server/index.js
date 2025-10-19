@@ -22,7 +22,7 @@ app.use('/images', express.static(path.resolve(__dirname, '../../frontend/public
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const execAsync = promisify(exec);
-const repoRoot = path.resolve(__dirname, '../../..');
+const repoRoot = path.resolve(__dirname, '../..');
 
 async function runGit(command) {
   try {
