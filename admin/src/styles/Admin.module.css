@@ -668,6 +668,43 @@
   min-height: 96px;
 }
 
+.gitSyncMetaNote {
+  margin: -0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #4a4b58;
+}
+
+.gitSyncMetaNote span {
+  font-weight: 600;
+  color: #1b1c26;
+}
+
+.gitSyncMetaError {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #a0381a;
+}
+
+.gitSyncMetaInfo {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #4a4b58;
+}
+
+.gitSyncMetaRetry {
+  all: unset;
+  cursor: pointer;
+  font-weight: 600;
+  color: #2a4494;
+  margin-left: 0.25rem;
+  text-decoration: underline;
+}
+
+.gitSyncMetaRetry:hover,
+.gitSyncMetaRetry:focus {
+  text-decoration: none;
+}
+
 .gitSyncSuccessMessage,
 .gitSyncErrorMessage {
   padding: 0.85rem 1rem;

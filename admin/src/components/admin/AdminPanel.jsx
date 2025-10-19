@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from '../../styles/Admin.module.css';
 import { useData } from '../../store/DataContext.jsx';
 import HomeEditor from './HomeEditor.jsx';
@@ -116,7 +116,8 @@ const AdminPanel = () => {
     replaceData,
     publishToFrontend,
     clone,
-    commitAndSync
+    commitAndSync,
+    listGitBranches
   } = useData();
 
   const [importMessage, setImportMessage] = useState('');
@@ -124,7 +125,11 @@ const AdminPanel = () => {
   const [reloadMessage, setReloadMessage] = useState('');
   const [changedSections, setChangedSections] = useState([]);
   const [gitBranchName, setGitBranchName] = useState('');
+  const [gitBranches, setGitBranches] = useState([]);
+  const [gitBranchStatus, setGitBranchStatus] = useState('');
+  const [isFetchingBranches, setIsFetchingBranches] = useState(false);
   const [gitCommitMessage, setGitCommitMessage] = useState('');
+  const [hasManualCommitMessage, setHasManualCommitMessage] = useState(false);
   const [gitResult, setGitResult] = useState(null);
   const [isGitSubmitting, setIsGitSubmitting] = useState(false);
   const sections = useMemo(
@@ -257,6 +262,56 @@ const AdminPanel = () => {
       });
   }, [changedSections, data, sections]);
 
+  const autoCommitSummary = useMemo(() => {
+    if (!changedSectionDetails.length) return '';
+    const parts = changedSectionDetails.map((section) => {
+      if (!section.fields?.length) return section.label;
+      const maxFields = 3;
+      const fieldPreview = section.fields.slice(0, maxFields).join(', ');
+      const overflow = section.fields.length > maxFields ? ', …' : '';
+      return `${section.label} (${fieldPreview}${overflow})`;
+    });
+    const summary = `Update ${parts.join('; ')}`;
+    if (summary.length <= 200) return summary;
+    return `${summary.slice(0, 197)}…`;
+  }, [changedSectionDetails]);
+
+  useEffect(() => {
+    if (!hasManualCommitMessage) {
+      setGitCommitMessage(autoCommitSummary);
+    }
+  }, [autoCommitSummary, hasManualCommitMessage]);
+
+  useEffect(() => {
+    if (hasManualCommitMessage && gitCommitMessage === autoCommitSummary) {
+      setHasManualCommitMessage(false);
+    }
+  }, [autoCommitSummary, gitCommitMessage, hasManualCommitMessage]);
+
+  const fetchGitBranches = useCallback(async () => {
+    setGitBranchStatus('');
+    setIsFetchingBranches(true);
+    try {
+      const result = await listGitBranches();
+      if (result.success) {
+        setGitBranches(result.branches || []);
+        if (result.current) {
+          setGitBranchName((prev) => prev || result.current);
+        }
+      } else {
+        setGitBranchStatus(result.error || 'Unable to load Git branches.');
+      }
+    } catch (error) {
+      setGitBranchStatus(error?.message || 'Unable to load Git branches.');
+    } finally {
+      setIsFetchingBranches(false);
+    }
+  }, [listGitBranches]);
+
+  useEffect(() => {
+    fetchGitBranches();
+  }, [fetchGitBranches]);
+
   const handleGitCommit = async (event) => {
     event.preventDefault();
     setGitResult(null);
@@ -279,8 +334,12 @@ const AdminPanel = () => {
         message: `Committed and pushed to ${result.branch || trimmedBranch}.`,
         steps: result.steps || []
       });
+      setGitBranchName(trimmedBranch);
+      setHasManualCommitMessage(false);
       setGitCommitMessage('');
+      fetchGitBranches();
     } else {
+      setGitBranchName(trimmedBranch);
       setGitResult({
         success: false,
         message: result.error || result.message || 'Git sync failed.',
@@ -502,7 +561,24 @@ const AdminPanel = () => {
                     onChange={(event) => setGitBranchName(event.target.value)}
                     placeholder="feature/change-tracker"
                     autoComplete="off"
+                    list="git-branch-options"
                   />
+                  <datalist id="git-branch-options">
+                    {gitBranches.map((branch) => (
+                      <option key={branch} value={branch} />
+                    ))}
+                  </datalist>
+                  {isFetchingBranches ? (
+                    <p className={styles.gitSyncMetaInfo}>Loading branches…</p>
+                  ) : null}
+                  {gitBranchStatus ? (
+                    <p className={styles.gitSyncMetaError} role="alert">
+                      {gitBranchStatus}{' '}
+                      <button type="button" className={styles.gitSyncMetaRetry} onClick={fetchGitBranches}>
+                        Retry
+                      </button>
+                    </p>
+                  ) : null}
                 </label>
                 <label className={styles.gitSyncField}>
                   <span className={styles.gitSyncLabel}>Commit message</span>
@@ -510,10 +586,19 @@ const AdminPanel = () => {
                     className={styles.gitSyncTextarea}
                     rows={3}
                     value={gitCommitMessage}
-                    onChange={(event) => setGitCommitMessage(event.target.value)}
+                    onChange={(event) => {
+                      const { value } = event.target;
+                      setGitCommitMessage(value);
+                      setHasManualCommitMessage(value !== autoCommitSummary);
+                    }}
                     placeholder="Summarise the edits you made"
                   />
                 </label>
+                {autoCommitSummary && hasManualCommitMessage ? (
+                  <p className={styles.gitSyncMetaNote}>
+                    Suggested summary: <span>{autoCommitSummary}</span>
+                  </p>
+                ) : null}
                 <button
                   type="submit"
                   className={styles.primaryButton}

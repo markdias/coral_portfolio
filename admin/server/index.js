@@ -140,6 +140,37 @@ app.post('/api/media/init', requireAdmin, async (req, res) => {
   }
 });
 
+app.get('/api/git/branches', requireAdmin, async (req, res) => {
+  try {
+    const currentBranchResult = await runGit('git rev-parse --abbrev-ref HEAD');
+    if (!currentBranchResult.ok) {
+      throw new Error(currentBranchResult.message || 'Unable to resolve current branch');
+    }
+
+    const branchListResult = await runGit('git branch --format="%(refname:short)"');
+    if (!branchListResult.ok) {
+      throw new Error(branchListResult.message || 'Unable to list branches');
+    }
+
+    const branches = branchListResult.stdout
+      .split('\n')
+      .map((name) => name.trim())
+      .filter(Boolean)
+      .sort((a, b) => a.localeCompare(b));
+
+    return res.json({
+      ok: true,
+      branches,
+      current: currentBranchResult.stdout.trim()
+    });
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      error: error?.message || 'Failed to read branches'
+    });
+  }
+});
+
 app.post('/api/git/commit-sync', requireAdmin, async (req, res) => {
   const { branchName, commitMessage } = req.body || {};
   const logs = [];
