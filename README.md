@@ -153,11 +153,16 @@ git remote add origin https://github.com/<your-username>/<your-repo>.git
 git push -u origin main
 ```
 
-### 3) GitHub Actions workflow
+### 3) GitHub Actions workflows
 
 - The workflow `.github/workflows/deploy-frontend.yml` builds `frontend/` and deploys to Pages.
 - It sets `VITE_BASE` to `/<repo-name>/` so Vite assets resolve correctly on Pages.
 - It publishes the build output from `frontend/dist`.
+
+#### Pull request build verification
+
+- The workflow `.github/workflows/pr-build.yml` runs for every pull request targeting `main` (and can be triggered manually).
+- It installs dependencies for the root workspace, `frontend/`, and `admin/`, then executes `npm run build` to ensure both apps compile successfully before merging changes.
 
 Enable Pages in your repository settings if prompted. After the first run, your site will be available at:
 
